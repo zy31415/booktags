@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui xmlpatterns sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -14,10 +14,14 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    settingsdialog.cpp
+    settingsdialog.cpp \
+    programinitializer.cpp \
+    filescanner.cpp
 
 HEADERS  += mainwindow.h \
-    settingsdialog.h
+    settingsdialog.h \
+    programinitializer.h \
+    filescanner.h
 
 FORMS    += mainwindow.ui \
     settingsdialog.ui

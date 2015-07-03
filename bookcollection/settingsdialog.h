@@ -17,6 +17,9 @@ public:
 
 private:
     Ui::SettingsDialog *ui;
+
+private slots:
+    void onChooseDirectory();
 };
 
 #endif // SETTINGSDIALOG_H
