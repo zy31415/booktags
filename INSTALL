@@ -1,0 +1,11 @@
+	
+	BookTags Installation
+	---------------------
+
+	To build and install BookTags, type the following commands:
+	
+	$ mkdir build/
+	$ cd build/
+	$ qmake path/to/src/booktags.pro
+	$ make
+	$ make install

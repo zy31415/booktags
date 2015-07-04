@@ -1,1 +1,8 @@
-A tagging system for books (pdfs, mobis, etc.) management.
+
+	BookTags Electronic Books Manager
+	---------------------------------------
+
+*	Introduction
+
+	BookTags is a tagging system for managing electronic books (pdfs, mobis, 
+	etc.).
