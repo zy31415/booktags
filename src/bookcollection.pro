@@ -8,7 +8,7 @@ QT       += core gui xmlpatterns sql xml
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = bookcollection
+TARGET = src
 TEMPLATE = app
 
 

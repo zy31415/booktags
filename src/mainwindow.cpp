@@ -7,7 +7,7 @@
 
 #include "filescanner.h"
 #include "settingsdialog.h"
-#include "programinitializer.h"
+#include "directoryinitializer.h"
 #include "superviseddirectorydialog.h"
 
 

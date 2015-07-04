@@ -1,4 +1,4 @@
-#include "programinitializer.h"
+#include "directoryinitializer.h"
 
 #include <QXmlStreamWriter>
 #include <QFile>
@@ -15,7 +15,7 @@
 
 #include "programconfigfile.h"
 
-ProgramInitializer::ProgramInitializer()
+DirectoryInitializer::DirectoryInitializer(QString dir)
 {
     ProgramConfigFile configFile;
     configFile.initConfigFile();
@@ -24,7 +24,7 @@ ProgramInitializer::ProgramInitializer()
 
 }
 
-QString ProgramInitializer::getDatabasePath() {
+QString DirectoryInitializer::getDatabasePath() {
     QXmlQuery query;
     QString queryUrl("doc('./.bookcollection/config.xml')/bookcollection/databaseFile/text()");
     QString result;
@@ -33,7 +33,7 @@ QString ProgramInitializer::getDatabasePath() {
     return result.trimmed();
 }
 
-void ProgramInitializer::initDatabase() {
+void DirectoryInitializer::initDatabase() {
     QSqlDatabase db;
     db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName(getDatabasePath());
