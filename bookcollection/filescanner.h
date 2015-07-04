@@ -6,7 +6,7 @@
 class FileScanner
 {
 public:
-    FileScanner(QDir dir);
+    FileScanner(const QDir& dir);
 };
 
 #endif // FILESCANNER_H

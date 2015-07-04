@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>800</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>400</width>
+     <width>800</width>
      <height>25</height>
     </rect>
    </property>
@@ -27,6 +27,8 @@
     <property name="title">
      <string>&amp;File</string>
     </property>
+    <addaction name="actionAddDirectory"/>
+    <addaction name="separator"/>
     <addaction name="action_Settings"/>
    </widget>
    <widget class="QMenu" name="menu_Help">
@@ -55,6 +57,11 @@
   <action name="action_About">
    <property name="text">
     <string>&amp;About</string>
+   </property>
+  </action>
+  <action name="actionAddDirectory">
+   <property name="text">
+    <string>&amp;Add directory...</string>
    </property>
   </action>
  </widget>

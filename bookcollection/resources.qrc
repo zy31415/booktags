@@ -1,5 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>icons/open.png</file>
+        <file>icons/AddDirectory.png</file>
+        <file>icons/RemoveDirectory.png</file>
     </qresource>
 </RCC>

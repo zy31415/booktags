@@ -3,10 +3,10 @@
 
 #include <QString>
 
-class ProgramInitializer
+class DirectoryInitializer
 {
 public:
-    ProgramInitializer();
+    DirectoryInitializer(QString dir);
 
     QString getDatabasePath();
     void initDatabase();

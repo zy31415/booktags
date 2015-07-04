@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "programconfigfile.h"
 
 namespace Ui {
 class MainWindow;
@@ -17,9 +18,11 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    ProgramConfigFile* configFile_;
 
 public slots:
     void onSettingsDirectory();
+    void onAddDirectory();
 };
 
 #endif // MAINWINDOW_H
