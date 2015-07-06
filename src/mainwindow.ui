@@ -27,7 +27,7 @@
     <property name="title">
      <string>&amp;File</string>
     </property>
-    <addaction name="actionAddDirectory"/>
+    <addaction name="actionOpenDirectory"/>
     <addaction name="separator"/>
     <addaction name="action_Settings"/>
    </widget>
@@ -59,9 +59,12 @@
     <string>&amp;About</string>
    </property>
   </action>
-  <action name="actionAddDirectory">
+  <action name="actionOpenDirectory">
    <property name="text">
-    <string>&amp;Add directory...</string>
+    <string>&amp;Open directory...</string>
+   </property>
+   <property name="toolTip">
+    <string>Open a directory</string>
    </property>
   </action>
  </widget>

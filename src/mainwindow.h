@@ -20,9 +20,11 @@ private:
     Ui::MainWindow *ui;
     ProgramConfigFile* configFile_;
 
-public slots:
-    void onSettingsDirectory();
-    void onAddDirectory();
+
+private slots:
+    void on_action_About_triggered();
+    void on_actionOpenDirectory_triggered();
+    void on_action_Settings_triggered();
 };
 
 #endif // MAINWINDOW_H
