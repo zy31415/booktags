@@ -11,20 +11,21 @@ class ProgramConfigFile
 private:
     QFile configFile;
 
-    static QDomNode getSupervisedDirectoresNode(QDomDocument& doc);
+    static QDomNode getHistoryDirectoresNode(QDomDocument& doc);
+    static QDomNode getCurrentDirectoryNode(QDomDocument& doc);
     static QDomNode getBookCollectionNode(QDomDocument& doc);
     static QDomNode searchNodeByTagNameAmongSiblings(QDomNode firstChild, QString tagName);
 
 public:
     ProgramConfigFile();
     void initConfigFile();
-    void addSupervisedDirectory(QDir dir);
-    QStringList getSupervisedDirectories();
+    void updateHistoryDirectories(QDir dir);
+    QStringList getCurrentDirectory();
     bool ifConfigFileExist();
     void removeSupervisedDirectory(QString dir);
     QString getSupervisedDirectory();
+    QString getCurrentDirectory();
 };
-
 
 
 #endif // PROGRAMCONFIGFILE_H

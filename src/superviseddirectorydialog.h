@@ -24,7 +24,6 @@ private:
 private slots:
     void on_pushButtonAddDirectory_clicked();
     void on_pushButtonRemoveDirectory_clicked();
-    void on_pushButton_clicked();
 };
 
 #endif // SUPERVISEDDIRECTORYDIALOG_H

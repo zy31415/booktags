@@ -45,13 +45,3 @@ void SupervisedDirectoryDialog::on_pushButtonRemoveDirectory_clicked()
 //    qDeleteAll(ui->listWidgetSupervisedDirectory->selectedItems());
 
 }
-
-void SupervisedDirectoryDialog::on_pushButton_clicked()
-{
-    QString path = QFileDialog::getExistingDirectory(
-                this,
-                "Choose config directory.",
-                "~",
-                QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks
-                );
-}

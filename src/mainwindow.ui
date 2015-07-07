@@ -28,6 +28,7 @@
      <string>&amp;File</string>
     </property>
     <addaction name="actionOpenDirectory"/>
+    <addaction name="actionRecent_directories"/>
     <addaction name="separator"/>
     <addaction name="action_Settings"/>
    </widget>
@@ -65,6 +66,11 @@
    </property>
    <property name="toolTip">
     <string>Open a directory</string>
+   </property>
+  </action>
+  <action name="actionRecent_directories">
+   <property name="text">
+    <string>Recent directories...</string>
    </property>
   </action>
  </widget>

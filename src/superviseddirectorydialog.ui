@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>689</width>
-    <height>83</height>
+    <width>654</width>
+    <height>104</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,21 +15,18 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QLabel" name="label">
        <property name="font">
         <font>
-         <pointsize>12</pointsize>
-         <weight>50</weight>
-         <bold>false</bold>
+         <pointsize>14</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
         </font>
        </property>
        <property name="text">
-        <string>Supervised directory:</string>
-       </property>
-       <property name="buddy">
-        <cstring>lineEdit</cstring>
+        <string>Select a directory:</string>
        </property>
       </widget>
      </item>
@@ -50,33 +47,22 @@
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QDialogButtonBox" name="buttonBox">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="standardButtons">
-        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-       </property>
-      </widget>
-     </item>
-    </layout>
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
    </item>
   </layout>
+  <zorder>buttonBox</zorder>
+  <zorder>label</zorder>
+  <zorder>lineEdit</zorder>
+  <zorder>label</zorder>
+  <zorder>lineEdit</zorder>
+  <zorder>pushButton</zorder>
  </widget>
  <resources>
   <include location="resources.qrc"/>
@@ -89,8 +75,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>596</x>
-     <y>72</y>
+     <x>257</x>
+     <y>398</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -105,8 +91,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>664</x>
-     <y>72</y>
+     <x>325</x>
+     <y>398</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
