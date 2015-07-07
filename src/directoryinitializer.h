@@ -17,6 +17,8 @@ public:
     DirectoryInitializer(QString dir);
     ~DirectoryInitializer();
 
+    QString getPathDatabase() {return path_database;}
+
     void initDatabase();
 };
 

@@ -3,5 +3,6 @@
         <file>icons/open.png</file>
         <file>icons/AddDirectory.png</file>
         <file>icons/RemoveDirectory.png</file>
+        <file>icons/pdf.png</file>
     </qresource>
 </RCC>

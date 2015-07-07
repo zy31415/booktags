@@ -36,6 +36,10 @@ DirectoryInitializer::~DirectoryInitializer()
 
 }
 
+// TODO: Redesign database
+//      tb_tags
+//      tb_books
+//      tb_matches
 void DirectoryInitializer::initDatabase() {
 
     if (!db.isValid())

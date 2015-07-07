@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QTreeWidgetItem>
 
 #include "programconfigfile.h"
 #include "currentdirectoryconfigurer.h"
@@ -28,11 +29,20 @@ private:
     CurrentDirectoryConfigurer* configCurrentDir_;
 
 
+    QString getSelectedTag();
+
+    void addPathIntoTreeWidget(QStringList filename);
+
+
+
 private slots:
     void on_action_About_triggered();
     void on_actionOpenDirectory_triggered();
     void on_action_Settings_triggered();
     void onCurrentDirectoryChange();
+    void on_listWidgetTags_itemSelectionChanged();
+    void on_pushButtonAddTag_clicked();
+    void on_pushButtonRemoveTag_clicked();
 };
 
 #endif // MAINWINDOW_H
