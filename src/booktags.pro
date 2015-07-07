@@ -18,14 +18,16 @@ SOURCES += main.cpp\
     filescanner.cpp \
     programconfigfile.cpp \
     directoryinitializer.cpp \
-    currentdirectorydialog.cpp
+    currentdirectorydialog.cpp \
+    currentdirectoryconfigurer.cpp
 
 HEADERS  += mainwindow.h \
     settingsdialog.h \
     filescanner.h \
     programconfigfile.h \
     directoryinitializer.h \
-    currentdirectorydialog.h
+    currentdirectorydialog.h \
+    currentdirectoryconfigurer.h
 
 FORMS    += mainwindow.ui \
     settingsdialog.ui \

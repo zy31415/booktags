@@ -13,7 +13,98 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
-  <widget class="QWidget" name="centralWidget"/>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QVBoxLayout" name="verticalLayout_3">
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <property name="leftMargin">
+     <number>11</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <item>
+     <widget class="QGroupBox" name="groupBox">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="title">
+       <string>Directory:</string>
+      </property>
+      <property name="flat">
+       <bool>false</bool>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout" stretch="40,70">
+       <property name="spacing">
+        <number>10</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>12</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>3</number>
+       </property>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>Labels</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QListWidget" name="listWidget"/>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>Books</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QListWidget" name="listWidget_2"/>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+   <zorder>listWidget</zorder>
+   <zorder>listWidget_2</zorder>
+   <zorder>groupBox</zorder>
+   <zorder>label</zorder>
+   <zorder>label_2</zorder>
+   <zorder>listWidget</zorder>
+  </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
@@ -48,6 +139,7 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="actionOpenDirectory"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="action_Settings">
@@ -61,6 +153,10 @@
    </property>
   </action>
   <action name="actionOpenDirectory">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/open.png</normaloff>:/icons/open.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Open directory...</string>
    </property>
@@ -75,6 +171,8 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections/>
 </ui>
