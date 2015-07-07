@@ -2,6 +2,7 @@
 
 #include <QXmlStreamWriter>
 #include <QFile>
+#include <QFileInfo>
 #include <QDir>
 #include <QDirIterator>
 
@@ -17,15 +18,16 @@
 
 DirectoryInitializer::DirectoryInitializer(QString dir) :
     dir(dir),
-    dir_config(dir + "/.booktags/"),
+    dir_config(dir + "/.booktags"),
     path_database(dir_config + "/booktags.sqlite3")
 {
     if (!QDir(dir_config).exists())
         QDir(dir_config).mkpath(".");
 
-    initDatabase();
-
-    loadAllBooksIntoDatabase();
+    if (!QFile(path_database).exists()) {
+        initDatabase();
+        loadAllBooksIntoDatabase();
+    }
 
 }
 
@@ -57,7 +59,8 @@ void DirectoryInitializer::initDatabase() {
     query.exec("create table if not exists tb_books ("
                "filename text primary key,"
                "title text,"
-               "authors text"
+               "authors text,"
+               "size integer"
                ")"
                );
 
@@ -68,10 +71,13 @@ void DirectoryInitializer::initDatabase() {
 void DirectoryInitializer::loadAllBooksIntoDatabase() {
     db.open();
 
-    QSqlQuery q(db);
-    q.prepare("insert into tb_books (filename) values (?)");
+    QSqlQuery q1(db);
+    q1.prepare("insert into tb_books (filename, size) values (?, ?)");
 
-    QVariantList names;
+    QSqlQuery q2(db);
+    q2.prepare("insert into tb_tags (name, filename) values (?, ?)");
+
+    QVariantList filenames, tagnames, filesizes;
 
     QDirIterator it(dir, QDirIterator::Subdirectories);
     while (it.hasNext()) {
@@ -79,15 +85,27 @@ void DirectoryInitializer::loadAllBooksIntoDatabase() {
         if (QFileInfo(f).suffix().toLower() == "pdf" ||
                 QFileInfo(f).suffix().toLower() == "mobi" ||
                 QFileInfo(f).suffix().toLower() == "epub"
-                )
-            names << QDir(dir).relativeFilePath(f);
+                ) {
+            filenames << QDir(dir).relativeFilePath(f);
+            tagnames << "all";
+            filesizes << QFileInfo(f).size();
+        }
+
     }
 
 
-    q.addBindValue(names);
+    q1.addBindValue(filenames);
+    q1.addBindValue(filesizes);
 
-    if (!q.execBatch())
-        qDebug() << q.lastError();
+    q2.addBindValue(tagnames);
+    q2.addBindValue(filenames);
+
+
+    if (!q1.execBatch())
+        qDebug() << q1.lastError();
+
+    if (!q2.execBatch())
+        qDebug() << q2.lastError();
 
     db.close();
 

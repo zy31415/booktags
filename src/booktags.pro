@@ -15,7 +15,6 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     settingsdialog.cpp \
-    filescanner.cpp \
     programconfigfile.cpp \
     directoryinitializer.cpp \
     currentdirectorydialog.cpp \
@@ -23,7 +22,6 @@ SOURCES += main.cpp\
 
 HEADERS  += mainwindow.h \
     settingsdialog.h \
-    filescanner.h \
     programconfigfile.h \
     directoryinitializer.h \
     currentdirectorydialog.h \
