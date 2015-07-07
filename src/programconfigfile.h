@@ -20,11 +20,12 @@ public:
     ProgramConfigFile();
     void initConfigFile();
     void updateHistoryDirectories(QDir dir);
-    QStringList getCurrentDirectory();
     bool ifConfigFileExist();
     void removeSupervisedDirectory(QString dir);
     QString getSupervisedDirectory();
+
     QString getCurrentDirectory();
+    void setCurrentDirectory(QString dir);
 };
 
 

@@ -15,11 +15,12 @@ public:
     explicit SettingsDialog(QWidget *parent = 0);
     ~SettingsDialog();
 
+
 private:
     Ui::SettingsDialog *ui;
 
 private slots:
-    void onChooseDirectory();
+    void on_pushButtonChooseDirectory_clicked();
 };
 
 #endif // SETTINGSDIALOG_H

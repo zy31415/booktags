@@ -70,18 +70,6 @@ void ProgramConfigFile::updateHistoryDirectories(QDir dir) {
     configFile.close();
 }
 
-QString ProgramConfigFile::getCurrentDirectory() {
-    QDomDocument doc;
-
-    configFile.open( QIODevice::ReadOnly | QIODevice::Text );
-    doc.setContent(&configFile);
-    configFile.close();
-
-    QDomNode node = getCurrentDirectoryNode(doc);
-
-    return node.toElement().text();
-}
-
 QDomNode ProgramConfigFile::getHistoryDirectoresNode(QDomDocument& doc) {
     QDomNode nn = getBookCollectionNode(doc);
     QDomNode n = nn.firstChild();
@@ -150,5 +138,28 @@ QString ProgramConfigFile::getCurrentDirectory() {
     configFile.close();
 
     QDomNode n = getCurrentDirectoryNode(doc);
-    return n.firstChild().toElement().text();
+    return n.toElement().text().trimmed();
+}
+
+void ProgramConfigFile::setCurrentDirectory(QString dir) {
+    QDomDocument doc;
+
+    configFile.open( QIODevice::ReadOnly | QIODevice::Text );
+    doc.setContent(&configFile);
+    configFile.close();
+
+    QDomNode np = getBookCollectionNode(doc);
+    QDomNode ns = getCurrentDirectoryNode(doc);
+
+    QDomElement newNodeTag = doc.createElement(QString("currentDirectory"));
+    QDomText newNodeText = doc.createTextNode(dir);
+    newNodeTag.appendChild(newNodeText);
+
+    np.replaceChild(newNodeTag, ns);
+
+    configFile.open( QIODevice::WriteOnly | QIODevice::Text );
+    QTextStream stream( &configFile );
+    stream << doc.toString();
+    configFile.close();
+
 }

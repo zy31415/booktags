@@ -9,7 +9,7 @@
 #include "filescanner.h"
 #include "settingsdialog.h"
 #include "directoryinitializer.h"
-#include "superviseddirectorydialog.h"
+#include "currentdirectorydialog.h"
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -22,7 +22,7 @@ MainWindow::MainWindow(QWidget *parent) :
     if (!configFile_->ifConfigFileExist())
         configFile_->initConfigFile();
 
-    QString file = configFile_ -> getSupervisedDirectory();
+    QString file = configFile_ -> getCurrentDirectory();
     qDebug() << file;
 
 
@@ -43,8 +43,9 @@ void MainWindow::on_action_About_triggered()
 
 void MainWindow::on_actionOpenDirectory_triggered()
 {
-    SupervisedDirectoryDialog diag(configFile_, this);
-    diag.exec();
+    CurrentDirectoryDialog diag(configFile_->getCurrentDirectory(), this);
+    if (diag.exec() == QDialog::Accepted)
+        configFile_->setCurrentDirectory(diag.getCurrentDirectory());
 }
 
 void MainWindow::on_action_Settings_triggered()

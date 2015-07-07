@@ -16,20 +16,20 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     settingsdialog.cpp \
     filescanner.cpp \
-    superviseddirectorydialog.cpp \
     programconfigfile.cpp \
-    directoryinitializer.cpp
+    directoryinitializer.cpp \
+    currentdirectorydialog.cpp
 
 HEADERS  += mainwindow.h \
     settingsdialog.h \
     filescanner.h \
-    superviseddirectorydialog.h \
     programconfigfile.h \
-    directoryinitializer.h
+    directoryinitializer.h \
+    currentdirectorydialog.h
 
 FORMS    += mainwindow.ui \
     settingsdialog.ui \
-    superviseddirectorydialog.ui
+    currentdirectorydialog.ui
 
 DISTFILES +=
 

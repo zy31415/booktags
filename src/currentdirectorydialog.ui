@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>SupervisedDirectoryDialog</class>
- <widget class="QDialog" name="SupervisedDirectoryDialog">
+ <class>CurrentDirectoryDialog</class>
+ <widget class="QDialog" name="CurrentDirectoryDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -28,13 +28,16 @@
        <property name="text">
         <string>Select a directory:</string>
        </property>
+       <property name="buddy">
+        <cstring>lineEdit</cstring>
+       </property>
       </widget>
      </item>
      <item>
       <widget class="QLineEdit" name="lineEdit"/>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton">
+      <widget class="QPushButton" name="pushButtonChooseDirectory">
        <property name="text">
         <string/>
        </property>
@@ -62,7 +65,7 @@
   <zorder>lineEdit</zorder>
   <zorder>label</zorder>
   <zorder>lineEdit</zorder>
-  <zorder>pushButton</zorder>
+  <zorder>pushButtonChooseDirectory</zorder>
  </widget>
  <resources>
   <include location="resources.qrc"/>
@@ -71,12 +74,12 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>SupervisedDirectoryDialog</receiver>
+   <receiver>CurrentDirectoryDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>257</x>
-     <y>398</y>
+     <y>94</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -87,12 +90,12 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>SupervisedDirectoryDialog</receiver>
+   <receiver>CurrentDirectoryDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>325</x>
-     <y>398</y>
+     <y>94</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>

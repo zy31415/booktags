@@ -9,9 +9,6 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    connect(ui->pushButtonChooseDirectory, SIGNAL(clicked(bool)), this, SLOT(onChooseDirectory()));
-
-
 }
 
 SettingsDialog::~SettingsDialog()
@@ -19,7 +16,9 @@ SettingsDialog::~SettingsDialog()
     delete ui;
 }
 
-void SettingsDialog::onChooseDirectory() {
+
+void SettingsDialog::on_pushButtonChooseDirectory_clicked()
+{
     QString path = QFileDialog::getExistingDirectory(
                 this,
                 "Choose config directory.",
