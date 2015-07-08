@@ -27,6 +27,9 @@ MainWindow::MainWindow(QWidget *parent) :
     if (!configFile_->ifConfigFileExist())
         configFile_->initConfigFile();
 
+    tbWidget_ = new TagsBooksWidget(this);
+    setCentralWidget(tbWidget_);
+
     onCurrentDirectoryChange();
 }
 
@@ -43,55 +46,6 @@ QString MainWindow::getCurrentDirectory() {
     return configFile_ -> getCurrentDirectory();
 }
 
-QString MainWindow::getSelectedTag() {
-    return ui->listWidgetTags->selectedItems()[0]->text();
-}
-
-
-// TODO: Use model/view structure to rewrite tags view.
-void MainWindow::onListWidgetTagsItemSelectionChanged()
-{
-    ui->listWidgetBooks->clear();
-
-    foreach (QString file, configCurrentDir_->getFiles(getSelectedTag())) {
-        QFileInfo fileinfo(file); // get file icon
-        QFileIconProvider iconprovider;
-        QIcon icon = iconprovider.icon(fileinfo);
-
-        if (fileinfo.suffix().toLower() == "pdf")
-            new QListWidgetItem(QIcon(":/icons/pdf.png"), file, ui->listWidgetBooks);
-        else
-            new QListWidgetItem(icon, file, ui->listWidgetBooks);
-    }
-
-
-    foreach (QString fileName, configCurrentDir_->getFiles(getSelectedTag())) {
-        QStringList splitFileName =fileName.split("/");
-
-        addPathIntoTreeWidget(splitFileName);
-    }
-}
-
-// TODO: Use model/view structure to rewrite books display.
-//          This part can be very complicated.
-void MainWindow::addPathIntoTreeWidget(QStringList splitFileName) {
-
-    if (splitFileName.size()==1)
-        new QTreeWidgetItem(ui->treeWidgetBooks, splitFileName);
-    else {
-        QTreeWidgetItem* parent = new QTreeWidgetItem(ui->treeWidgetBooks);
-        parent->setText(0, splitFileName[0]);
-
-        for (int ii=1; ii< splitFileName.size(); ii++) {
-            QString s = splitFileName[ii];
-            QTreeWidgetItem* item = new QTreeWidgetItem();
-            item->setText(0,s);
-            parent->addChild(item);
-            parent = item;
-        }
-    }
-
-}
 
 
 void MainWindow::on_action_About_triggered()
@@ -116,64 +70,54 @@ void MainWindow::on_action_Settings_triggered()
     diag.exec();
 }
 
-void MainWindow::onCurrentDirectoryChange() {    
-
+void MainWindow::onCurrentDirectoryChange() {
     if (configCurrentDir_ != 0)
         delete configCurrentDir_;
 
     configCurrentDir_ = new CurrentDirectoryConfigurer(getCurrentDirectory());
 
-    updateListWidgetTags();
+    tbWidget_->updateTagsList(configCurrentDir_->getTags());
 
     // update Main Widget title
-    ui->groupBox->setTitle("Directory: " + getCurrentDirectory());
+    tbWidget_ ->setCurrentDirectoryLabel(getCurrentDirectory());
 }
 
-void MainWindow::updateListWidgetTags() {
-    disconnect(ui->listWidgetTags, SIGNAL(itemSelectionChanged()), this, SLOT(onListWidgetTagsItemSelectionChanged()));
-    ui->listWidgetTags->clear();
-    ui->listWidgetTags->addItems(configCurrentDir_->getTags());
-
-    connect(ui->listWidgetTags, SIGNAL(itemSelectionChanged()), this, SLOT(onListWidgetTagsItemSelectionChanged()));
-    ui->listWidgetTags->setCurrentRow(0);
-}
-
-void MainWindow::on_pushButtonAddTag_clicked()
-{
-    bool ok;
-    QString tag = QInputDialog::getText(this, tr("QInputDialog::getText()"),
-                                         tr("New tag name:"), QLineEdit::Normal,
-                                         QDir::home().dirName(), &ok);
-    if (ok && !tag.isEmpty()) {
-        configCurrentDir_->addTag(tag);
-        ui->listWidgetTags->setCurrentItem(
-                    new QListWidgetItem(tag, ui->listWidgetTags)
-                    );
-    }
-}
 
 void MainWindow::on_pushButtonRemoveTag_clicked()
 {
-    QListWidgetItem* item_ = ui->listWidgetTags->selectedItems()[0];
+//    QListWidgetItem* item_ = ui->listWidgetTags->selectedItems()[0];
 
-    if (item_->text().trimmed() == QString("all")) {
-        QMessageBox::warning(this,
-                            QString("Deletion error"),
-                            QString("Keep the tag \"all\"."));
-        return;
-    }
-
-
-    QString message = QString("Are you sure to delete tag: \"%1\" ?").arg(item_->text());
-
-    QMessageBox::StandardButton reply = QMessageBox::question(
-                this, "Delete tag", message,
-                QMessageBox::Yes|QMessageBox::No);
-
-    if (reply == QMessageBox::Yes) {
-        configCurrentDir_->removeTag(item_->text().trimmed());
-        delete item_;
-    }
+//    if (item_->text().trimmed() == QString("all")) {
+//        QMessageBox::warning(this,
+//                            QString("Deletion error"),
+//                            QString("Keep the tag \"all\"."));
+//        return;
+//    }
 
 
+//    QString message = QString("Are you sure to delete tag: \"%1\" ?").arg(item_->text());
+
+//    QMessageBox::StandardButton reply = QMessageBox::question(
+//                this, "Delete tag", message,
+//                QMessageBox::Yes|QMessageBox::No);
+
+//    if (reply == QMessageBox::Yes) {
+//        configCurrentDir_->removeTag(item_->text().trimmed());
+//        delete item_;
+//    }
+
+
+}
+
+
+void MainWindow::onTagsSelectionChanged() {
+    QStringList files = configCurrentDir_->getFiles(tbWidget_->getSelectedTag());
+    tbWidget_->updateBooksListView(files);
+}
+
+void MainWindow::addTag(const QString& tag) {
+    // TODO : check if the tag is a valid tag.
+    //      if Yes:
+    configCurrentDir_->addTag(tag);
+    tbWidget_->addTag(tag);
 }

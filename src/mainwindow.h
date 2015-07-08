@@ -6,7 +6,7 @@
 
 #include "programconfigfile.h"
 #include "currentdirectoryconfigurer.h"
-
+#include "tagsbookswidget.h"
 
 namespace Ui {
 class MainWindow;
@@ -22,17 +22,14 @@ public:
 
     QString getCurrentDirectory();
 
+
 private:
     Ui::MainWindow *ui;
     ProgramConfigFile* configFile_;
 
     CurrentDirectoryConfigurer* configCurrentDir_;
 
-
-    QString getSelectedTag();
-
-    void addPathIntoTreeWidget(QStringList filename);
-
+    TagsBooksWidget* tbWidget_;
 
 
 private slots:
@@ -40,10 +37,11 @@ private slots:
     void on_actionOpenDirectory_triggered();
     void on_action_Settings_triggered();
     void onCurrentDirectoryChange();
-    void onListWidgetTagsItemSelectionChanged();
-    void on_pushButtonAddTag_clicked();
     void on_pushButtonRemoveTag_clicked();
-    void updateListWidgetTags();
+    void onTagsSelectionChanged();
+
+public slots:
+    void addTag(const QString& tag);
 };
 
 #endif // MAINWINDOW_H
