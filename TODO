@@ -1,0 +1,15 @@
+The most difficult part of this program is how to track directory change.
+My best bet right now is to use multi-threading.
+Everytime when I open the program, there will be a thread check the change of 
+the directory which happened during the period that the program was not running.
+This thread will find out deleted files and newly added files and perhaps
+give suggestions on renamed files.
+
+When the program is running, there should be a thread keeping checking
+the status of the directory.
+
+07/08/2015
+
+
+
+
