@@ -33,6 +33,8 @@ DirectoryInitializer::DirectoryInitializer(QString dir) :
 
 }
 
+// FIXME : How to properly close a database connection? i.e. How to get rid of the following message:
+// QSqlDatabasePrivate::addDatabase: duplicate connection name 'qt_sql_default_connection', old connection removed.
 DirectoryInitializer::~DirectoryInitializer()
 {
     QString connection = db.connectionName();
@@ -75,6 +77,8 @@ void DirectoryInitializer::initDatabase() {
 
 }
 
+
+// TODO : use progress bar and multithreading here.
 void DirectoryInitializer::loadAllBooksIntoDatabase() {
 
     QSqlQuery q(db);
@@ -109,9 +113,7 @@ void DirectoryInitializer::loadAllBooksIntoDatabase() {
     q2.addBindValue(filenames);
 
     QUERY_EXECBATCH(q1);
-    qDebug() << "xxxxxxxxxxxx1";
     QUERY_EXECBATCH(q2);
-    qDebug() << "xxxxxxxxxxxx2";
 }
 
 

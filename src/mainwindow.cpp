@@ -15,7 +15,6 @@
 #include "currentdirectorydialog.h"
 
 
-// TODO: Rearrange the initialization logic.
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
@@ -82,35 +81,8 @@ void MainWindow::onCurrentDirectoryChange() {
     tbWidget_ ->setCurrentDirectoryLabel(getCurrentDirectory());
 }
 
-
-void MainWindow::on_pushButtonRemoveTag_clicked()
-{
-//    QListWidgetItem* item_ = ui->listWidgetTags->selectedItems()[0];
-
-//    if (item_->text().trimmed() == QString("all")) {
-//        QMessageBox::warning(this,
-//                            QString("Deletion error"),
-//                            QString("Keep the tag \"all\"."));
-//        return;
-//    }
-
-
-//    QString message = QString("Are you sure to delete tag: \"%1\" ?").arg(item_->text());
-
-//    QMessageBox::StandardButton reply = QMessageBox::question(
-//                this, "Delete tag", message,
-//                QMessageBox::Yes|QMessageBox::No);
-
-//    if (reply == QMessageBox::Yes) {
-//        configCurrentDir_->removeTag(item_->text().trimmed());
-//        delete item_;
-//    }
-
-
-}
-
-
-void MainWindow::onTagsSelectionChanged() {
+// TODO - This progress can be very slow. Can you use multi-threading?
+void MainWindow::changeTagSelection() {
     QStringList files = configCurrentDir_->getFiles(tbWidget_->getSelectedTag());
     tbWidget_->updateBooksListView(files);
 }
@@ -120,4 +92,9 @@ void MainWindow::addTag(const QString& tag) {
     //      if Yes:
     configCurrentDir_->addTag(tag);
     tbWidget_->addTag(tag);
+}
+
+void MainWindow::deleteSelection() {
+    configCurrentDir_->removeTag(tbWidget_->getSelectedTag());
+    tbWidget_->deleteSelection();
 }

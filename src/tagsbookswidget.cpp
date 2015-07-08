@@ -5,6 +5,7 @@
 #include <QFileIconProvider>
 #include <QInputDialog>
 #include <QDir>
+#include <QMessageBox>
 
 TagsBooksWidget::TagsBooksWidget(QWidget *parent) :
     QWidget(parent),
@@ -13,10 +14,13 @@ TagsBooksWidget::TagsBooksWidget(QWidget *parent) :
     ui->setupUi(this);
 
     // when different tags are selected
-    connect(ui->listWidgetTags, SIGNAL(itemSelectionChanged()), parentWidget(), SLOT(onTagsSelectionChanged()));
+    connect(ui->listWidgetTags, SIGNAL(itemSelectionChanged()), parentWidget(), SLOT(changeTagSelection()));
 
     // when you try to add a tag:
     connect(this, SIGNAL(tagAdded(QString)), parentWidget(), SLOT(addTag(QString)));
+
+    // when you try to delete a tag:
+    connect(this, SIGNAL(selectionDeleted()), parentWidget(), SLOT(deleteSelection()));
 }
 
 TagsBooksWidget::~TagsBooksWidget()
@@ -31,11 +35,11 @@ QString TagsBooksWidget::getSelectedTag() {
 
 void TagsBooksWidget::updateTagsList(QStringList tags) {
     // disconnect the ralted signal first, otherwise the program will crash.
-    disconnect(ui->listWidgetTags, SIGNAL(itemSelectionChanged()), parentWidget(), SLOT(onTagsSelectionChanged()));
+    disconnect(ui->listWidgetTags, SIGNAL(itemSelectionChanged()), parentWidget(), SLOT(changeTagSelection()));
     ui->listWidgetTags->clear();
 
     ui->listWidgetTags->addItems(tags);
-    connect(ui->listWidgetTags, SIGNAL(itemSelectionChanged()), parentWidget(), SLOT(onTagsSelectionChanged()));
+    connect(ui->listWidgetTags, SIGNAL(itemSelectionChanged()), parentWidget(), SLOT(changeTagSelection()));
     ui->listWidgetTags->setCurrentRow(0);
 }
 
@@ -120,13 +124,28 @@ void TagsBooksWidget::addTag(QString tag) {
                 );
 }
 
-//void MainWindow::on_pushButtonRemoveTag_clicked()
-//{
-////    QListWidgetItem* item_ = ui->listWidgetTags->selectedItems()[0];
+void TagsBooksWidget::on_pushButtonRemoveTag_clicked()
+{
+    QListWidgetItem* item_ = ui->listWidgetTags->selectedItems()[0];
 
-////    if (item_->text().trimmed() == QString("all")) {
-////        QMessageBox::warning(this,
-////                            QString("Deletion error"),
-////                            QString("Keep the tag \"all\"."));
-////        return;
-////    }
+    if (item_->text().trimmed() == QString("all")) {
+        QMessageBox::warning(this,
+                            QString("Deletion error"),
+                            QString("Keep the tag \"all\"."));
+        return;
+    }
+
+    QString message = QString("Are you sure to delete tag: \"%1\" ?").arg(item_->text());
+
+    QMessageBox::StandardButton reply = QMessageBox::question(
+                this, "Delete tag", message,
+                QMessageBox::Yes|QMessageBox::No);
+
+
+    if (reply == QMessageBox::Yes)
+        emit selectionDeleted();
+}
+
+void TagsBooksWidget::deleteSelection() {
+    delete ui->listWidgetTags->selectedItems()[0];
+}

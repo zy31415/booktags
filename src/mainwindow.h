@@ -37,11 +37,11 @@ private slots:
     void on_actionOpenDirectory_triggered();
     void on_action_Settings_triggered();
     void onCurrentDirectoryChange();
-    void on_pushButtonRemoveTag_clicked();
-    void onTagsSelectionChanged();
+    void changeTagSelection();
 
 public slots:
     void addTag(const QString& tag);
+    void deleteSelection();
 };
 
 #endif // MAINWINDOW_H

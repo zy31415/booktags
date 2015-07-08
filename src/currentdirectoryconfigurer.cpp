@@ -76,10 +76,12 @@ void CurrentDirectoryConfigurer::addTag(QString tag) {
 void CurrentDirectoryConfigurer::removeTag(QString tag) {
     db.open();
     QSqlQuery query(db);
-    QString cmd = QString("delete from tb_tags where name=(\"%1\");").arg(tag);
 
-    if (!query.exec(cmd))
-        qDebug() << query.lastError();
+    QString cmd1 = QString("delete from tb_matches where tag=(\"%1\");").arg(tag);
+    QUERY_EXEC(query, cmd1);
+
+    QString cmd2 = QString("delete from tb_tags where tag=(\"%1\");").arg(tag);
+    QUERY_EXEC(query, cmd2);
 
     db.close(); // for close connection
 }
