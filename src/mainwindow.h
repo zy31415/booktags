@@ -40,9 +40,10 @@ private slots:
     void on_actionOpenDirectory_triggered();
     void on_action_Settings_triggered();
     void onCurrentDirectoryChange();
-    void on_listWidgetTags_itemSelectionChanged();
+    void onListWidgetTagsItemSelectionChanged();
     void on_pushButtonAddTag_clicked();
     void on_pushButtonRemoveTag_clicked();
+    void updateListWidgetTags();
 };
 
 #endif // MAINWINDOW_H

@@ -16,6 +16,8 @@
 
 #include <iostream>
 
+#include "utils.h"
+
 DirectoryInitializer::DirectoryInitializer(QString dir) :
     dir(dir),
     dir_config(dir + "/.booktags"),
@@ -33,13 +35,13 @@ DirectoryInitializer::DirectoryInitializer(QString dir) :
 
 DirectoryInitializer::~DirectoryInitializer()
 {
+    QString connection = db.connectionName();
+    db.close();
+    db = QSqlDatabase();
+    db.removeDatabase(connection);
 
 }
 
-// TODO: Redesign database
-//      tb_tags
-//      tb_books
-//      tb_matches
 void DirectoryInitializer::initDatabase() {
 
     if (!db.isValid())
@@ -52,36 +54,40 @@ void DirectoryInitializer::initDatabase() {
 
     QSqlQuery query(db);
 
-    query.exec("create table if not exists tb_tags ("
-               "name text,"
-               "filename text,"
-               "primary key (name, filename),"
-               "foreign key(filename) references tb_books(filename)"
-               ")"
-               );
+    QUERY_EXEC(query, "create table if not exists tb_tags ("
+                   "tag text primary key"
+                   ")"
+            );
 
-    query.exec("create table if not exists tb_books ("
-               "filename text primary key,"
-               "title text,"
-               "authors text,"
-               "size integer"
-               ")"
-               );
+    QUERY_EXEC(query, "create table if not exists tb_books ("
+                   "filename text primary key,"
+                   "title text,"
+                   "authors text,"
+                   "size integer"
+                   ")");
 
-    db.close(); // for close connection
+    QUERY_EXEC(query, "create table if not exists tb_matches ("
+                   "tag text,"
+                   "filename text,"
+                   "foreign key (tag) references tb_tags(tag),"
+                   "foreign key (filename) references tb_books(filename)"
+                   ")");
 
 }
 
 void DirectoryInitializer::loadAllBooksIntoDatabase() {
-    db.open();
+
+    QSqlQuery q(db);
+    QUERY_EXEC(q, "insert into tb_tags (tag) values (\"all\")");
+
 
     QSqlQuery q1(db);
     q1.prepare("insert into tb_books (filename, size) values (?, ?)");
 
     QSqlQuery q2(db);
-    q2.prepare("insert into tb_tags (name, filename) values (?, ?)");
+    q2.prepare("insert into tb_matches (tag, filename) values (\"all\", ?)");
 
-    QVariantList filenames, tagnames, filesizes;
+    QVariantList filenames, filesizes;
 
     QDirIterator it(dir, QDirIterator::Subdirectories);
     while (it.hasNext()) {
@@ -91,7 +97,6 @@ void DirectoryInitializer::loadAllBooksIntoDatabase() {
                 QFileInfo(f).suffix().toLower() == "epub"
                 ) {
             filenames << QDir(dir).relativeFilePath(f);
-            tagnames << "all";
             filesizes << QFileInfo(f).size();
         }
 
@@ -101,17 +106,13 @@ void DirectoryInitializer::loadAllBooksIntoDatabase() {
     q1.addBindValue(filenames);
     q1.addBindValue(filesizes);
 
-    q2.addBindValue(tagnames);
     q2.addBindValue(filenames);
 
-
-    if (!q1.execBatch())
-        qDebug() << q1.lastError();
-
-    if (!q2.execBatch())
-        qDebug() << q2.lastError();
-
-    db.close();
-
+    QUERY_EXECBATCH(q1);
+    qDebug() << "xxxxxxxxxxxx1";
+    QUERY_EXECBATCH(q2);
+    qDebug() << "xxxxxxxxxxxx2";
 }
+
+
 

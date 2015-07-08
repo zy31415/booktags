@@ -25,7 +25,8 @@ HEADERS  += mainwindow.h \
     programconfigfile.h \
     directoryinitializer.h \
     currentdirectorydialog.h \
-    currentdirectoryconfigurer.h
+    currentdirectoryconfigurer.h \
+    utils.h
 
 FORMS    += mainwindow.ui \
     settingsdialog.ui \

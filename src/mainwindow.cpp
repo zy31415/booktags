@@ -28,9 +28,6 @@ MainWindow::MainWindow(QWidget *parent) :
         configFile_->initConfigFile();
 
     onCurrentDirectoryChange();
-
-    ui->listWidgetTags->addItems(configCurrentDir_->getTags());
-    ui->listWidgetTags->setCurrentRow(0);
 }
 
 MainWindow::~MainWindow()
@@ -52,7 +49,7 @@ QString MainWindow::getSelectedTag() {
 
 
 // TODO: Use model/view structure to rewrite tags view.
-void MainWindow::on_listWidgetTags_itemSelectionChanged()
+void MainWindow::onListWidgetTagsItemSelectionChanged()
 {
     ui->listWidgetBooks->clear();
 
@@ -72,7 +69,6 @@ void MainWindow::on_listWidgetTags_itemSelectionChanged()
         QStringList splitFileName =fileName.split("/");
 
         addPathIntoTreeWidget(splitFileName);
-
     }
 }
 
@@ -110,8 +106,6 @@ void MainWindow::on_actionOpenDirectory_triggered()
     CurrentDirectoryDialog diag(configFile_->getCurrentDirectory(), this);
     if (diag.exec() == QDialog::Accepted) {
         configFile_->setCurrentDirectory(diag.getCurrentDirectory());
-
-        //
         onCurrentDirectoryChange();
     }
 }
@@ -122,15 +116,26 @@ void MainWindow::on_action_Settings_triggered()
     diag.exec();
 }
 
-void MainWindow::onCurrentDirectoryChange() {
-    // update Main Widget title
-    ui->groupBox->setTitle("Directory: " + getCurrentDirectory());
-
+void MainWindow::onCurrentDirectoryChange() {    
 
     if (configCurrentDir_ != 0)
         delete configCurrentDir_;
 
     configCurrentDir_ = new CurrentDirectoryConfigurer(getCurrentDirectory());
+
+    updateListWidgetTags();
+
+    // update Main Widget title
+    ui->groupBox->setTitle("Directory: " + getCurrentDirectory());
+}
+
+void MainWindow::updateListWidgetTags() {
+    disconnect(ui->listWidgetTags, SIGNAL(itemSelectionChanged()), this, SLOT(onListWidgetTagsItemSelectionChanged()));
+    ui->listWidgetTags->clear();
+    ui->listWidgetTags->addItems(configCurrentDir_->getTags());
+
+    connect(ui->listWidgetTags, SIGNAL(itemSelectionChanged()), this, SLOT(onListWidgetTagsItemSelectionChanged()));
+    ui->listWidgetTags->setCurrentRow(0);
 }
 
 void MainWindow::on_pushButtonAddTag_clicked()
