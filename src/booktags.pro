@@ -18,7 +18,8 @@ SOURCES += main.cpp\
     programconfigfile.cpp \
     directoryinitializer.cpp \
     currentdirectorydialog.cpp \
-    currentdirectoryconfigurer.cpp
+    currentdirectoryconfigurer.cpp \
+    tagsbookswidget.cpp
 
 HEADERS  += mainwindow.h \
     settingsdialog.h \
@@ -26,11 +27,13 @@ HEADERS  += mainwindow.h \
     directoryinitializer.h \
     currentdirectorydialog.h \
     currentdirectoryconfigurer.h \
-    utils.h
+    utils.h \
+    tagsbookswidget.h
 
 FORMS    += mainwindow.ui \
     settingsdialog.ui \
-    currentdirectorydialog.ui
+    currentdirectorydialog.ui \
+    tagsbookswidget.ui
 
 DISTFILES +=
 
