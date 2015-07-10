@@ -42,6 +42,7 @@ private slots:
 public slots:
     void addTag(const QString& tag);
     void deleteSelection();
+    void changeStatusBarMessage(QString msg);
 };
 
 #endif // MAINWINDOW_H

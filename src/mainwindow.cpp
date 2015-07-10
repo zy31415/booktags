@@ -34,7 +34,7 @@ MainWindow::MainWindow(QWidget *parent) :
     setCentralWidget(tbWidget_);
 
     QProgressBar* qProgressBar_ = new QProgressBar(this);
-    ui->statusBar->addPermanentWidget(qProgressBar_, 2);
+    ui->statusBar->addPermanentWidget(qProgressBar_, 0);
     //ui->statusBar->removeWidget(qProgressBar_);
 
     onCurrentDirectoryChange();
@@ -107,4 +107,8 @@ void MainWindow::addTag(const QString& tag) {
 void MainWindow::deleteSelection() {
     configCurrentDir_->removeTag(tbWidget_->getSelectedTag());
     tbWidget_->deleteSelection();
+}
+
+void MainWindow::changeStatusBarMessage(QString msg) {
+    ui->statusBar->showMessage(msg);
 }

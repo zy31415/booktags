@@ -5,87 +5,109 @@
 #include <QVariant>
 #include <QDebug>
 #include <QSqlError>
+#include <QDir>
 
 #include "utils.h"
+#include "database.h"
 
+class MainWindow;
 
 CurrentDirectoryConfigurer::CurrentDirectoryConfigurer(
         QString dir,
         QObject *parent) :
+
     QObject(parent),
-    dir(dir)
+    dir(dir),
+    dir_config(dir + "/.booktags"),
+    path_database(dir_config + "/booktags.sqlite3")
 {
-    initializer_ = new DirectoryInitializer(dir, this);
-    connect(initializer_, SIGNAL(finished()),
-            initializer_, SLOT(deleteLater()));
-    initializer_->start();
 
-    path_database = initializer_->getPathDatabase();
+    if (!QDir(dir_config).exists())
+        QDir(dir_config).mkpath(".");
 
-    if (!db.isValid())
-        db = (QSqlDatabase::addDatabase("QSQLITE"));
-    else
-        qDebug() << "You might have initialize database twice.";
-
-    db.setDatabaseName(path_database);
+    initDatabase();
 }
 
-QStringList CurrentDirectoryConfigurer::getTags() {
-    db.open();
+CurrentDirectoryConfigurer::~CurrentDirectoryConfigurer() {
+}
 
-    QSqlQuery query(db);
+void CurrentDirectoryConfigurer::initDatabase() {
+    Database* task_ = new Database(dir);
+
+    QThread* thread_ = new QThread;
+    task_->moveToThread(thread_);
+
+    connect(thread_, SIGNAL(started()), task_, SLOT(loadAllBooksIntoDatabase()));
+    connect(task_, SIGNAL(finished()), thread_, SLOT(quit()));
+    connect(thread_, SIGNAL(finished()), task_, SLOT(deleteLater()));
+    connect(thread_, SIGNAL(finished()), task_, SLOT(deleteLater()));
+
+    // for message:
+    connect(task_, SIGNAL(statusBarMessageChanged(QString)),
+            parent(), SLOT(changeStatusBarMessage(QString)));
+
+    thread_->start();
+
+}
+
+
+
+QStringList CurrentDirectoryConfigurer::getTags() {
+//    db.open();
+
+//    QSqlQuery query(db);
 
     QStringList out;
 
-    QUERY_EXEC(query, "select distinct tag from tb_tags;");
-    while (query.next()) {
-        out << query.value(0).toString();
-    }
+//    QUERY_EXEC(query, "select distinct tag from tb_tags;");
+//    while (query.next()) {
+//        out << query.value(0).toString();
+//    }
 
 
-    db.close(); // for close connection
+//    db.close(); // for close connection
 
     return  out;
 }
 
 QStringList CurrentDirectoryConfigurer::getFiles(QString tag) {
-    db.open();
+//    db.open();
 
-    QSqlQuery query(db);
+//    QSqlQuery query(db);
 
-    QStringList out;
+//    QStringList out;
 
-    QUERY_EXEC(query, QString("select filename from tb_matches where tag=\"%1\"").arg(tag));
+//    QUERY_EXEC(query, QString("select filename from tb_matches where tag=\"%1\"").arg(tag));
 
-    while (query.next()) {
-        out << query.value(0).toString();
-    }
+//    while (query.next()) {
+//        out << query.value(0).toString();
+//    }
 
 
-    db.close(); // for close connection
+//    db.close(); // for close connection
 
-    return  out;
+//    return  out;
 }
 
 void CurrentDirectoryConfigurer::addTag(QString tag) {
-    db.open();
-    QSqlQuery query(db);
-    QString cmd = QString("insert into tb_tags (tag) values (\"%1\");").arg(tag);
+//    db.open();
+//    QSqlQuery query(db);
+//    QString cmd = QString("insert into tb_tags (tag) values (\"%1\");").arg(tag);
 
-    QUERY_EXEC(query, cmd);
+//    QUERY_EXEC(query, cmd);
 
-    db.close(); // for close connection
+//    db.close(); // for close connection
 }
 
 void CurrentDirectoryConfigurer::removeTag(QString tag) {
-    db.open();
-    QSqlQuery query(db);
+//    db.open();
+//    QSqlQuery query(db);
 
-    QString cmd1 = QString("delete from tb_matches where tag=(\"%1\");").arg(tag);
-    QUERY_EXEC(query, cmd1);
+//    QString cmd1 = QString("delete from tb_matches where tag=(\"%1\");").arg(tag);
+//    QUERY_EXEC(query, cmd1);
 
-    QString cmd2 = QString("delete from tb_tags where tag=(\"%1\");").arg(tag);
-    QUERY_EXEC(query, cmd2);
+//    QString cmd2 = QString("delete from tb_tags where tag=(\"%1\");").arg(tag);
+//    QUERY_EXEC(query, cmd2);
 
-    db.close(); // for close connection
+//    db.close(); // for close connection
 }

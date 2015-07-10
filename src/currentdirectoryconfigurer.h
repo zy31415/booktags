@@ -3,23 +3,23 @@
 
 #include <QString>
 #include <QStringList>
-#include <QSqlDatabase>
 #include <QObject>
 
 #include "directoryinitializer.h"
+
 
 class CurrentDirectoryConfigurer : public QObject
 {
     Q_OBJECT
 
 private:
-    QString dir, path_database;
-    QSqlDatabase db;
-
-    DirectoryInitializer* initializer_;
+    QString dir, dir_config, path_database;
 
 public:
     explicit CurrentDirectoryConfigurer(QString dir, QObject *parent = 0);
+    ~CurrentDirectoryConfigurer();
+
+    void initDatabase();
 
     QStringList getTags();
     QStringList getFiles(QString tag);
