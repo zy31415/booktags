@@ -2,6 +2,8 @@
 #include "ui_mainwindow.h"
 
 #include <iostream>
+
+// Qt
 #include <QDir>
 #include <QDebug>
 #include <QMessageBox>
@@ -9,7 +11,9 @@
 #include <QFileDialog>
 #include <QFileIconProvider>
 #include <QFileSystemModel>
+#include <QProgressBar>
 
+// This project
 #include "settingsdialog.h"
 #include "directoryinitializer.h"
 #include "currentdirectorydialog.h"
@@ -28,6 +32,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     tbWidget_ = new TagsBooksWidget(this);
     setCentralWidget(tbWidget_);
+
+    QProgressBar* qProgressBar_ = new QProgressBar(this);
+    ui->statusBar->addPermanentWidget(qProgressBar_, 2);
+    //ui->statusBar->removeWidget(qProgressBar_);
 
     onCurrentDirectoryChange();
 }
@@ -73,7 +81,9 @@ void MainWindow::onCurrentDirectoryChange() {
     if (configCurrentDir_ != 0)
         delete configCurrentDir_;
 
-    configCurrentDir_ = new CurrentDirectoryConfigurer(getCurrentDirectory());
+    configCurrentDir_ = new CurrentDirectoryConfigurer(
+                getCurrentDirectory(),
+                this);
 
     tbWidget_->updateTagsList(configCurrentDir_->getTags());
 

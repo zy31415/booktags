@@ -1,24 +1,24 @@
 #include "directoryinitializer.h"
 
+// Qt
 #include <QXmlStreamWriter>
 #include <QFile>
 #include <QFileInfo>
 #include <QDir>
 #include <QDirIterator>
-
 #include <QXmlQuery>
 #include <QXmlResultItems>
 #include <QXmlNodeModelIndex>
 #include <QDebug>
 #include <QSqlError>
-
 #include <QSqlQuery>
 
 #include <iostream>
 
 #include "utils.h"
 
-DirectoryInitializer::DirectoryInitializer(QString dir) :
+DirectoryInitializer::DirectoryInitializer(QString dir, QObject *parent) :
+    QThread(parent),
     dir(dir),
     dir_config(dir + "/.booktags"),
     path_database(dir_config + "/booktags.sqlite3")
@@ -28,7 +28,7 @@ DirectoryInitializer::DirectoryInitializer(QString dir) :
 
     if (!QFile(path_database).exists()) {
         initDatabase();
-        loadAllBooksIntoDatabase();
+        //loadAllBooksIntoDatabase();
     }
 
 }
@@ -80,6 +80,13 @@ void DirectoryInitializer::initDatabase() {
 
 // TODO : use progress bar and multithreading here.
 void DirectoryInitializer::loadAllBooksIntoDatabase() {
+    if (!db.isValid())
+        db = (QSqlDatabase::addDatabase("QSQLITE"));
+    else
+        qDebug() << "You might have initialize database twice.";
+
+    db.setDatabaseName(path_database);
+    db.open();
 
     QSqlQuery q(db);
     QUERY_EXEC(q, "insert into tb_tags (tag) values (\"all\")");
@@ -114,6 +121,12 @@ void DirectoryInitializer::loadAllBooksIntoDatabase() {
 
     QUERY_EXECBATCH(q1);
     QUERY_EXECBATCH(q2);
+
+    db.close();
+}
+
+void DirectoryInitializer::run() Q_DECL_OVERRIDE {
+    loadAllBooksIntoDatabase();
 }
 
 

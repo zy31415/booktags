@@ -1,22 +1,26 @@
 #include "currentdirectoryconfigurer.h"
 
-#include "directoryinitializer.h"
-
+// Qt
 #include <QSqlQuery>
 #include <QVariant>
-
 #include <QDebug>
 #include <QSqlError>
 
 #include "utils.h"
 
 
-CurrentDirectoryConfigurer::CurrentDirectoryConfigurer(QString dir) :
+CurrentDirectoryConfigurer::CurrentDirectoryConfigurer(
+        QString dir,
+        QObject *parent) :
+    QObject(parent),
     dir(dir)
 {
-    DirectoryInitializer initializer(dir);
+    initializer_ = new DirectoryInitializer(dir, this);
+    connect(initializer_, SIGNAL(finished()),
+            initializer_, SLOT(deleteLater()));
+    initializer_->start();
 
-    path_database = initializer.getPathDatabase();
+    path_database = initializer_->getPathDatabase();
 
     if (!db.isValid())
         db = (QSqlDatabase::addDatabase("QSQLITE"));

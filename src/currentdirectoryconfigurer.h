@@ -4,15 +4,22 @@
 #include <QString>
 #include <QStringList>
 #include <QSqlDatabase>
+#include <QObject>
 
-class CurrentDirectoryConfigurer
+#include "directoryinitializer.h"
+
+class CurrentDirectoryConfigurer : public QObject
 {
+    Q_OBJECT
+
 private:
     QString dir, path_database;
     QSqlDatabase db;
 
+    DirectoryInitializer* initializer_;
+
 public:
-    CurrentDirectoryConfigurer(QString dir);
+    explicit CurrentDirectoryConfigurer(QString dir, QObject *parent = 0);
 
     QStringList getTags();
     QStringList getFiles(QString tag);
