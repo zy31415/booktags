@@ -61,6 +61,8 @@ void DirectoryInitializer::initDatabase() {
                    ")"
             );
 
+    QUERY_EXEC(query, "insert into tb_tags (tag) values (\"all\");");
+
     QUERY_EXEC(query, "create table if not exists tb_books ("
                    "filename text primary key,"
                    "title text,"

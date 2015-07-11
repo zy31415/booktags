@@ -52,6 +52,7 @@ void TagsBooksWidget::onListWidgetTagsItemSelectionChanged()
 {
 //    ui->listWidgetBooks->clear();
 
+
 //    foreach (QString file, configCurrentDir_->getFiles(getSelectedTag())) {
 //        QFileInfo fileinfo(file); // get file icon
 //        QFileIconProvider iconprovider;
@@ -148,4 +149,8 @@ void TagsBooksWidget::on_pushButtonRemoveTag_clicked()
 
 void TagsBooksWidget::deleteSelection() {
     delete ui->listWidgetTags->selectedItems()[0];
+}
+
+void TagsBooksWidget::addOneBook(QString item) {
+    ui->listWidgetBooks->addItem(item);
 }

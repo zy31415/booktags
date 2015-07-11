@@ -11,7 +11,7 @@
 #include <QFileDialog>
 #include <QFileIconProvider>
 #include <QFileSystemModel>
-#include <QProgressBar>
+
 
 // This project
 #include "settingsdialog.h"
@@ -33,7 +33,8 @@ MainWindow::MainWindow(QWidget *parent) :
     tbWidget_ = new TagsBooksWidget(this);
     setCentralWidget(tbWidget_);
 
-    QProgressBar* qProgressBar_ = new QProgressBar(this);
+    qProgressBar_ = new QProgressBar(ui->statusBar);
+
     ui->statusBar->addPermanentWidget(qProgressBar_, 0);
     //ui->statusBar->removeWidget(qProgressBar_);
 
@@ -111,4 +112,22 @@ void MainWindow::deleteSelection() {
 
 void MainWindow::changeStatusBarMessage(QString msg) {
     ui->statusBar->showMessage(msg);
+}
+
+void MainWindow::setProgressBar(int max, int current){
+    qProgressBar_->setMinimum(0);
+    qProgressBar_->setMaximum(max);
+    qProgressBar_->setValue(current);
+
+}
+
+void MainWindow::updateTagsBooksWidget() {
+    tbWidget_->updateTagsList(configCurrentDir_->getTags());
+
+    // update Main Widget title
+    tbWidget_ ->setCurrentDirectoryLabel(getCurrentDirectory());
+}
+
+void MainWindow::oneBookAdded(const QString& file) {
+    tbWidget_->addOneBook(file);
 }

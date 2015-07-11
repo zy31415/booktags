@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QTreeWidgetItem>
+#include <QProgressBar>
 
 #include "programconfigfile.h"
 #include "currentdirectoryconfigurer.h"
@@ -30,6 +31,7 @@ private:
     CurrentDirectoryConfigurer* configCurrentDir_;
 
     TagsBooksWidget* tbWidget_;
+    QProgressBar* qProgressBar_;
 
 
 private slots:
@@ -43,6 +45,9 @@ public slots:
     void addTag(const QString& tag);
     void deleteSelection();
     void changeStatusBarMessage(QString msg);
+    void setProgressBar(int max, int current);
+    void updateTagsBooksWidget();
+    void oneBookAdded(const QString& file);
 };
 
 #endif // MAINWINDOW_H

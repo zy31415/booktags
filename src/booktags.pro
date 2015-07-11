@@ -20,7 +20,9 @@ SOURCES += main.cpp\
     currentdirectorydialog.cpp \
     currentdirectoryconfigurer.cpp \
     tagsbookswidget.cpp \
-    database.cpp
+    database.cpp \
+    initialloadthread.cpp \
+    connectionfactory.cpp
 
 HEADERS  += mainwindow.h \
     settingsdialog.h \
@@ -30,7 +32,9 @@ HEADERS  += mainwindow.h \
     currentdirectoryconfigurer.h \
     utils.h \
     tagsbookswidget.h \
-    database.h
+    database.h \
+    initialloadthread.h \
+    connectionfactory.h
 
 FORMS    += mainwindow.ui \
     settingsdialog.ui \

@@ -10,6 +10,8 @@
 #include "utils.h"
 #include "database.h"
 
+#include "initialloadthread.h"
+
 class MainWindow;
 
 CurrentDirectoryConfigurer::CurrentDirectoryConfigurer(
@@ -19,95 +21,144 @@ CurrentDirectoryConfigurer::CurrentDirectoryConfigurer(
     QObject(parent),
     dir(dir),
     dir_config(dir + "/.booktags"),
-    path_database(dir_config + "/booktags.sqlite3")
+    path_database(dir_config + "/booktags.sqlite3"),
+    conn_(new ConnectionFactory(path_database))
 {
 
-    if (!QDir(dir_config).exists())
+    if (!QDir(dir_config).exists()) {
         QDir(dir_config).mkpath(".");
+        initDatabase();
+        loadAllBooksIntoDatabase();
+    }
 
-    initDatabase();
 }
 
 CurrentDirectoryConfigurer::~CurrentDirectoryConfigurer() {
+    delete conn_;
 }
 
 void CurrentDirectoryConfigurer::initDatabase() {
-    Database* task_ = new Database(dir);
 
-    QThread* thread_ = new QThread;
-    task_->moveToThread(thread_);
+    QSqlDatabase db = conn_->getDatabase();
 
-    connect(thread_, SIGNAL(started()), task_, SLOT(loadAllBooksIntoDatabase()));
-    connect(task_, SIGNAL(finished()), thread_, SLOT(quit()));
-    connect(thread_, SIGNAL(finished()), task_, SLOT(deleteLater()));
-    connect(thread_, SIGNAL(finished()), task_, SLOT(deleteLater()));
+    db.open();
 
-    // for message:
-    connect(task_, SIGNAL(statusBarMessageChanged(QString)),
+    QSqlQuery query(db);
+
+    QUERY_EXEC(query, "create table if not exists tb_tags ("
+                   "tag text primary key"
+                   ")"
+            );
+
+    QUERY_EXEC(query, "insert into tb_tags (tag) values (\"all\");");
+
+    QUERY_EXEC(query, "create table if not exists tb_books ("
+                   "filename text primary key,"
+                   "title text,"
+                   "authors text,"
+                   "size integer"
+                   ")");
+
+    QUERY_EXEC(query, "create table if not exists tb_matches ("
+                   "tag text,"
+                   "filename text,"
+                   "foreign key (tag) references tb_tags(tag),"
+                   "foreign key (filename) references tb_books(filename)"
+                   ")");
+
+}
+
+void CurrentDirectoryConfigurer::loadAllBooksIntoDatabase() {
+    InitialLoadThread* thread_ = new InitialLoadThread(dir, conn_, this);
+
+    connect(thread_, SIGNAL(finished()), thread_, SLOT(deleteLater()));
+    connect(thread_, SIGNAL(statusBarMessageChanged(QString)),
             parent(), SLOT(changeStatusBarMessage(QString)));
+    connect(thread_, SIGNAL(setProgressBar(int,int)),
+            parent(), SLOT(setProgressBar(int, int)));
+    connect(thread_, SIGNAL(oneBookAdded(QString)),
+            parent(), SLOT(oneBookAdded(QString)));
 
     thread_->start();
 
 }
 
 
-
 QStringList CurrentDirectoryConfigurer::getTags() {
-//    db.open();
+    QSqlDatabase db = conn_->getDatabase();
+    db.open();
 
-//    QSqlQuery query(db);
+    QSqlQuery query(db);
+    QString cmd = QString("select tag from tb_tags;");
+
+    QMutex* mutex = conn_->getMutex();
+
+    mutex->lock();
+    QUERY_EXEC(query, cmd);
+    mutex->unlock();
+
+    db.close(); // for close connection
 
     QStringList out;
 
-//    QUERY_EXEC(query, "select distinct tag from tb_tags;");
-//    while (query.next()) {
-//        out << query.value(0).toString();
-//    }
+    while(query.next()) {
+        out << query.value(0).toString();
+    }
 
-
-//    db.close(); // for close connection
-
-    return  out;
+    return out;
 }
 
-QStringList CurrentDirectoryConfigurer::getFiles(QString tag) {
-//    db.open();
+QStringList CurrentDirectoryConfigurer::getFiles(const QString& tag) {
+    QSqlDatabase db = conn_->getDatabase();
+    db.open();
 
-//    QSqlQuery query(db);
+    QSqlQuery query(db);
+    QString cmd = QString("select filename from tb_matches where tag=\"%1\";").arg(tag);
 
-//    QStringList out;
+    QMutex* mutex = conn_->getMutex();
 
-//    QUERY_EXEC(query, QString("select filename from tb_matches where tag=\"%1\"").arg(tag));
+    mutex->lock();
+    QUERY_EXEC(query, cmd);
+    mutex->unlock();
 
-//    while (query.next()) {
-//        out << query.value(0).toString();
-//    }
+    db.close(); // for close connection
 
+    QStringList out;
 
-//    db.close(); // for close connection
+    while(query.next()) {
+        out << query.value(0).toString();
+    }
 
-//    return  out;
+    return out;
 }
 
 void CurrentDirectoryConfigurer::addTag(QString tag) {
-//    db.open();
-//    QSqlQuery query(db);
-//    QString cmd = QString("insert into tb_tags (tag) values (\"%1\");").arg(tag);
+    QSqlDatabase db = conn_->getDatabase();
+    db.open();
+    QSqlQuery query(db);
+    QString cmd = QString("insert into tb_tags (tag) values (\"%1\");").arg(tag);
 
-//    QUERY_EXEC(query, cmd);
+    QMutex* mutex = conn_->getMutex();
+    mutex->lock();
+    QUERY_EXEC(query, cmd);
+    mutex->unlock();
 
-//    db.close(); // for close connection
+    db.close(); // for close connection
 }
 
 void CurrentDirectoryConfigurer::removeTag(QString tag) {
-//    db.open();
-//    QSqlQuery query(db);
+    QSqlDatabase db = conn_->getDatabase();
+    db.open();
+    QSqlQuery query(db);
 
-//    QString cmd1 = QString("delete from tb_matches where tag=(\"%1\");").arg(tag);
-//    QUERY_EXEC(query, cmd1);
+    QString cmd1 = QString("delete from tb_matches where tag=(\"%1\");").arg(tag);
+    QString cmd2 = QString("delete from tb_tags where tag=(\"%1\");").arg(tag);
 
-//    QString cmd2 = QString("delete from tb_tags where tag=(\"%1\");").arg(tag);
-//    QUERY_EXEC(query, cmd2);
+    QMutex* mutex = conn_->getMutex();
+    mutex->lock();
+    QUERY_EXEC(query, cmd1);
+    QUERY_EXEC(query, cmd2);
+    mutex->unlock();
 
-//    db.close(); // for close connection
+    db.close(); // for close connection
 }

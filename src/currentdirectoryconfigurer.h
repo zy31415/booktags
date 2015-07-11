@@ -6,7 +6,7 @@
 #include <QObject>
 
 #include "directoryinitializer.h"
-
+#include "connectionfactory.h"
 
 class CurrentDirectoryConfigurer : public QObject
 {
@@ -15,14 +15,17 @@ class CurrentDirectoryConfigurer : public QObject
 private:
     QString dir, dir_config, path_database;
 
+    ConnectionFactory* conn_;
+
 public:
     explicit CurrentDirectoryConfigurer(QString dir, QObject *parent = 0);
     ~CurrentDirectoryConfigurer();
 
     void initDatabase();
+    void loadAllBooksIntoDatabase();
 
     QStringList getTags();
-    QStringList getFiles(QString tag);
+    QStringList getFiles(const QString& tag);
 
     void addTag(QString tag);
     void removeTag(QString tag);
