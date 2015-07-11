@@ -5,7 +5,6 @@
 #include <QStringList>
 #include <QObject>
 
-#include "directoryinitializer.h"
 #include "connectionfactory.h"
 
 class CurrentDirectoryConfigurer : public QObject

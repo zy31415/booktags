@@ -25,13 +25,14 @@ void InitialLoadThread::run() {
 
     int total = countNumOfFiles();
 
+    emit initialLoadStarted(total);
+
     int nth = 0;
     QDirIterator it(dir, QDirIterator::Subdirectories);
     while (it.hasNext()) {
         QString f = it.next();
         if (isValidBookFormat(f)){
             QString path = QDir(dir).relativeFilePath(f);
-            emit statusBarMessageChanged(path);
 
             int size =  QFileInfo(f).size();
 
@@ -45,13 +46,10 @@ void InitialLoadThread::run() {
             mutex_->unlock();
             nth++;
 
-            emit setProgressBar(total, nth);
-            emit oneBookAdded(f);
-
+            emit oneItemAdded(nth, f);
         }
-        emit statusBarMessageChanged("Done!");
-
     }
+    emit statusBarMessageChanged("Done!");
     emit finished();
 }
 

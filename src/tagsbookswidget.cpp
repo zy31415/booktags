@@ -151,6 +151,7 @@ void TagsBooksWidget::deleteSelection() {
     delete ui->listWidgetTags->selectedItems()[0];
 }
 
-void TagsBooksWidget::addOneBook(QString item) {
-    ui->listWidgetBooks->addItem(item);
+void TagsBooksWidget::addOneBookToTag(QString item, QString tag) {
+    if (ui->listWidgetTags->selectedItems()[0]->text() == tag)
+        ui->listWidgetBooks->addItem(item);
 }

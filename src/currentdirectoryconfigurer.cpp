@@ -8,7 +8,6 @@
 #include <QDir>
 
 #include "utils.h"
-#include "database.h"
 
 #include "initialloadthread.h"
 
@@ -72,12 +71,13 @@ void CurrentDirectoryConfigurer::loadAllBooksIntoDatabase() {
     InitialLoadThread* thread_ = new InitialLoadThread(dir, conn_, this);
 
     connect(thread_, SIGNAL(finished()), thread_, SLOT(deleteLater()));
+    connect(thread_, SIGNAL(initialLoadStarted(int)),
+            parent(), SLOT(setStatusBarForInitialLoading(int)));
+    connect(thread_, SIGNAL(oneItemAdded(int,QString)),
+            parent(), SLOT(updateStatusBarForInitialLoading(int, QString)));
+
     connect(thread_, SIGNAL(statusBarMessageChanged(QString)),
             parent(), SLOT(changeStatusBarMessage(QString)));
-    connect(thread_, SIGNAL(setProgressBar(int,int)),
-            parent(), SLOT(setProgressBar(int, int)));
-    connect(thread_, SIGNAL(oneBookAdded(QString)),
-            parent(), SLOT(oneBookAdded(QString)));
 
     thread_->start();
 
@@ -113,7 +113,8 @@ QStringList CurrentDirectoryConfigurer::getFiles(const QString& tag) {
     db.open();
 
     QSqlQuery query(db);
-    QString cmd = QString("select filename from tb_matches where tag=\"%1\";").arg(tag);
+    QString cmd = QString("select filename from tb_matches where tag=\"%1\";").arg(tag.trimmed());
+
 
     QMutex* mutex = conn_->getMutex();
 
@@ -121,14 +122,15 @@ QStringList CurrentDirectoryConfigurer::getFiles(const QString& tag) {
     QUERY_EXEC(query, cmd);
     mutex->unlock();
 
-    db.close(); // for close connection
-
+    // for close connection
     QStringList out;
 
     while(query.next()) {
-        out << query.value(0).toString();
+        qDebug() << query.value(0).toString();
+        QString oi = query.value(0).toString();
+        out << oi;
     }
-
+    db.close();
     return out;
 }
 
@@ -136,7 +138,7 @@ void CurrentDirectoryConfigurer::addTag(QString tag) {
     QSqlDatabase db = conn_->getDatabase();
     db.open();
     QSqlQuery query(db);
-    QString cmd = QString("insert into tb_tags (tag) values (\"%1\");").arg(tag);
+    QString cmd = QString("insert into tb_tags (tag) values (\"%1\");").arg(tag.trimmed());
 
     QMutex* mutex = conn_->getMutex();
     mutex->lock();

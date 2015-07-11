@@ -39,7 +39,7 @@ private slots:
     void on_pushButtonRemoveTag_clicked();
 
 public slots:
-    void addOneBook(QString item);
+    void addOneBookToTag(QString item, QString tag);
 
 signals:
     void tagAdded(const QString &);

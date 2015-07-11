@@ -15,9 +15,8 @@
 
 // This project
 #include "settingsdialog.h"
-#include "directoryinitializer.h"
 #include "currentdirectorydialog.h"
-
+#include "statusbar.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -26,17 +25,15 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+
+    layout()->addWidget(new StatusBar(this));
+
     configFile_ = new ProgramConfigFile;
     if (!configFile_->ifConfigFileExist())
         configFile_->initConfigFile();
 
     tbWidget_ = new TagsBooksWidget(this);
     setCentralWidget(tbWidget_);
-
-    qProgressBar_ = new QProgressBar(ui->statusBar);
-
-    ui->statusBar->addPermanentWidget(qProgressBar_, 0);
-    //ui->statusBar->removeWidget(qProgressBar_);
 
     onCurrentDirectoryChange();
 }
@@ -114,13 +111,6 @@ void MainWindow::changeStatusBarMessage(QString msg) {
     ui->statusBar->showMessage(msg);
 }
 
-void MainWindow::setProgressBar(int max, int current){
-    qProgressBar_->setMinimum(0);
-    qProgressBar_->setMaximum(max);
-    qProgressBar_->setValue(current);
-
-}
-
 void MainWindow::updateTagsBooksWidget() {
     tbWidget_->updateTagsList(configCurrentDir_->getTags());
 
@@ -128,6 +118,19 @@ void MainWindow::updateTagsBooksWidget() {
     tbWidget_ ->setCurrentDirectoryLabel(getCurrentDirectory());
 }
 
-void MainWindow::oneBookAdded(const QString& file) {
-    tbWidget_->addOneBook(file);
+
+void MainWindow::setStatusBarForInitialLoading(int max) {
+    qProgressBar_ = new QProgressBar(ui->statusBar);
+    qProgressBar_->setMinimum(0);
+    qProgressBar_->setMaximum(max);
+
+    ui->statusBar->addPermanentWidget(qProgressBar_, 0);
+
+}
+
+void MainWindow::updateStatusBarForInitialLoading(int current, QString file) {
+    qProgressBar_->setValue(current);
+    ui->statusBar->showMessage(file);
+
+    tbWidget_->addOneBookToTag(file, QString("all"));
 }

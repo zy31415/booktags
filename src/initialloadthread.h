@@ -25,9 +25,9 @@ public:
     void run();
 
 signals:
-    void oneBookAdded(const QString& file);
+    void initialLoadStarted(int max);
+    void oneItemAdded(int current, QString file);
     void statusBarMessageChanged(const QString& file);
-    void setProgressBar(int, int);
     void finished();
 };
 

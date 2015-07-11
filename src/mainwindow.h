@@ -45,9 +45,9 @@ public slots:
     void addTag(const QString& tag);
     void deleteSelection();
     void changeStatusBarMessage(QString msg);
-    void setProgressBar(int max, int current);
     void updateTagsBooksWidget();
-    void oneBookAdded(const QString& file);
+    void setStatusBarForInitialLoading(int max);
+    void updateStatusBarForInitialLoading(int current, QString file);
 };
 
 #endif // MAINWINDOW_H

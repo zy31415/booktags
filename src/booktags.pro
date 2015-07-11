@@ -16,25 +16,23 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     settingsdialog.cpp \
     programconfigfile.cpp \
-    directoryinitializer.cpp \
     currentdirectorydialog.cpp \
     currentdirectoryconfigurer.cpp \
     tagsbookswidget.cpp \
-    database.cpp \
     initialloadthread.cpp \
-    connectionfactory.cpp
+    connectionfactory.cpp \
+    statusbar.cpp
 
 HEADERS  += mainwindow.h \
     settingsdialog.h \
     programconfigfile.h \
-    directoryinitializer.h \
     currentdirectorydialog.h \
     currentdirectoryconfigurer.h \
     utils.h \
     tagsbookswidget.h \
-    database.h \
     initialloadthread.h \
-    connectionfactory.h
+    connectionfactory.h \
+    statusbar.h
 
 FORMS    += mainwindow.ui \
     settingsdialog.ui \
