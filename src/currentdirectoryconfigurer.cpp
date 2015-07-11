@@ -122,15 +122,14 @@ QStringList CurrentDirectoryConfigurer::getFiles(const QString& tag) {
     QUERY_EXEC(query, cmd);
     mutex->unlock();
 
-    // for close connection
     QStringList out;
 
     while(query.next()) {
-        qDebug() << query.value(0).toString();
-        QString oi = query.value(0).toString();
-        out << oi;
+        out << query.value(0).toString();
     }
-    db.close();
+
+    db.close(); // close connection
+
     return out;
 }
 
