@@ -16,7 +16,7 @@
 // This project
 #include "settingsdialog.h"
 #include "currentdirectorydialog.h"
-#include "statusbar.h"
+
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -26,7 +26,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
 
-    layout()->addWidget(new StatusBar(this));
+    //layout()->addWidget(new StatusBar(this));
 
     configFile_ = new ProgramConfigFile;
     if (!configFile_->ifConfigFileExist())

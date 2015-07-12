@@ -1,6 +1,7 @@
 #ifndef TAGSBOOKSWIDGET_H
 #define TAGSBOOKSWIDGET_H
 
+
 #include <QWidget>
 
 #include "currentdirectoryconfigurer.h"
@@ -27,13 +28,9 @@ public:
     void deleteSelection();
 
 private:
-    Ui::TagsBooksWidget *ui;    
-
-    void addPathIntoTreeWidget(QStringList splitFileName);
-
+    Ui::TagsBooksWidget *ui;
 
 private slots:
-    void onListWidgetTagsItemSelectionChanged();
 
     void on_pushButtonAddTag_clicked();
     void on_pushButtonRemoveTag_clicked();

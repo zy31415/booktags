@@ -1,3 +1,4 @@
+/** @file */
 #include "tagsbookswidget.h"
 #include "ui_tagsbookswidget.h"
 
@@ -6,6 +7,10 @@
 #include <QInputDialog>
 #include <QDir>
 #include <QMessageBox>
+#include <QStandardItem>
+#include <QDebug>
+
+#include "filetree.h"
 
 TagsBooksWidget::TagsBooksWidget(QWidget *parent) :
     QWidget(parent),
@@ -47,55 +52,16 @@ void TagsBooksWidget::setCurrentDirectoryLabel(QString dir) {
     ui->labelCurrentDir->setText("Current Directory: " + dir);
 }
 
-// TODO: Use model/view structure to rewrite tags view.
-void TagsBooksWidget::onListWidgetTagsItemSelectionChanged()
-{
-//    ui->listWidgetBooks->clear();
-
-
-//    foreach (QString file, configCurrentDir_->getFiles(getSelectedTag())) {
-//        QFileInfo fileinfo(file); // get file icon
-//        QFileIconProvider iconprovider;
-//        QIcon icon = iconprovider.icon(fileinfo);
-
-//        if (fileinfo.suffix().toLower() == "pdf")
-//            new QListWidgetItem(QIcon(":/icons/pdf.png"), file, ui->listWidgetBooks);
-//        else
-//            new QListWidgetItem(icon, file, ui->listWidgetBooks);
-//    }
-
-
-//    foreach (QString fileName, configCurrentDir_->getFiles(getSelectedTag())) {
-//        QStringList splitFileName =fileName.split("/");
-
-//        addPathIntoTreeWidget(splitFileName);
-//    }
-}
-
-// TODO: Use model/view structure to rewrite books display.
-//          This part can be very complicated.
-void TagsBooksWidget::addPathIntoTreeWidget(QStringList splitFileName) {
-
-//    if (splitFileName.size()==1)
-//        new QTreeWidgetItem(ui->treeWidgetBooks, splitFileName);
-//    else {
-//        QTreeWidgetItem* parent = new QTreeWidgetItem(ui->treeWidgetBooks);
-//        parent->setText(0, splitFileName[0]);
-
-//        for (int ii=1; ii< splitFileName.size(); ii++) {
-//            QString s = splitFileName[ii];
-//            QTreeWidgetItem* item = new QTreeWidgetItem();
-//            item->setText(0,s);
-//            parent->addChild(item);
-//            parent = item;
-//        }
-//    }
-
-}
-
+///
+/// \brief This method updates the books view according to the input.
+/// \param books book paths used to update the book view.
+///
+/// This function is called by the MainWindow.
+///
 void TagsBooksWidget::updateBooksListView(QStringList books) {
     ui->listWidgetBooks->clear();
 
+    // TODO - Change this to model/view.
     foreach (QString file, books) {
         QFileInfo fileinfo(file); // get file icon
         QFileIconProvider iconprovider;
@@ -106,6 +72,15 @@ void TagsBooksWidget::updateBooksListView(QStringList books) {
         else
             new QListWidgetItem(icon, file, ui->listWidgetBooks);
     }
+
+    QStandardItemModel* model_ = new QStandardItemModel(this);
+    QStandardItem *parentItem = model_->invisibleRootItem();
+
+    foreach (QString file, books) {
+        add_path(parentItem, file);
+    }
+
+    ui->treeViewBooks->setModel(model_);
 }
 
 void TagsBooksWidget::on_pushButtonAddTag_clicked()
@@ -147,10 +122,18 @@ void TagsBooksWidget::on_pushButtonRemoveTag_clicked()
         emit selectionDeleted();
 }
 
+///
+/// \brief Delete selected tag.
+///
 void TagsBooksWidget::deleteSelection() {
     delete ui->listWidgetTags->selectedItems()[0];
 }
 
+///
+/// \brief One book item will be shown under the indicated tag.
+/// \param item book name
+/// \param tag tag name
+///
 void TagsBooksWidget::addOneBookToTag(QString item, QString tag) {
     if (ui->listWidgetTags->selectedItems()[0]->text() == tag)
         ui->listWidgetBooks->addItem(item);

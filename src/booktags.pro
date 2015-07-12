@@ -21,7 +21,7 @@ SOURCES += main.cpp\
     tagsbookswidget.cpp \
     initialloadthread.cpp \
     connectionfactory.cpp \
-    statusbar.cpp
+    filetree.cpp
 
 HEADERS  += mainwindow.h \
     settingsdialog.h \
@@ -32,7 +32,7 @@ HEADERS  += mainwindow.h \
     tagsbookswidget.h \
     initialloadthread.h \
     connectionfactory.h \
-    statusbar.h
+    filetree.h
 
 FORMS    += mainwindow.ui \
     settingsdialog.ui \

@@ -4,5 +4,8 @@
         <file>icons/AddDirectory.png</file>
         <file>icons/RemoveDirectory.png</file>
         <file>icons/pdf.png</file>
+        <file>icons/directory.png</file>
+        <file>icons/file.png</file>
+        <file>icons/mobi.png</file>
     </qresource>
 </RCC>

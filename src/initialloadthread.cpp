@@ -46,7 +46,7 @@ void InitialLoadThread::run() {
             mutex_->unlock();
             nth++;
 
-            emit oneItemAdded(nth, f);
+            emit oneItemAdded(nth, path);
         }
     }
     emit statusBarMessageChanged("Done!");
