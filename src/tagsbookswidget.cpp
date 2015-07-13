@@ -38,6 +38,7 @@ QString TagsBooksWidget::getSelectedTag() {
 }
 
 
+// TODO - Change to Model/View structure.
 void TagsBooksWidget::updateTagsList(QStringList tags) {
     // disconnect the ralted signal first, otherwise the program will crash.
     disconnect(ui->listWidgetTags, SIGNAL(itemSelectionChanged()), parentWidget(), SLOT(changeTagSelection()));
@@ -58,27 +59,14 @@ void TagsBooksWidget::setCurrentDirectoryLabel(QString dir) {
 ///
 /// This function is called by the MainWindow.
 ///
+///  TODO - Simplify the file viewing window.
 void TagsBooksWidget::updateBooksListView(QStringList books) {
-    ui->listWidgetBooks->clear();
-
-    // TODO - Change this to model/view.
-    foreach (QString file, books) {
-        QFileInfo fileinfo(file); // get file icon
-        QFileIconProvider iconprovider;
-        QIcon icon = iconprovider.icon(fileinfo);
-
-        if (fileinfo.suffix().toLower() == "pdf")
-            new QListWidgetItem(QIcon(":/icons/pdf.png"), file, ui->listWidgetBooks);
-        else
-            new QListWidgetItem(icon, file, ui->listWidgetBooks);
-    }
 
     QStandardItemModel* model_ = new QStandardItemModel(this);
     QStandardItem *parentItem = model_->invisibleRootItem();
 
-    foreach (QString file, books) {
+    foreach (QString file, books)
         add_path(parentItem, file);
-    }
 
     ui->treeViewBooks->setModel(model_);
 }
@@ -135,6 +123,6 @@ void TagsBooksWidget::deleteSelection() {
 /// \param tag tag name
 ///
 void TagsBooksWidget::addOneBookToTag(QString item, QString tag) {
-    if (ui->listWidgetTags->selectedItems()[0]->text() == tag)
-        ui->listWidgetBooks->addItem(item);
+//    if (ui->listWidgetTags->selectedItems()[0]->text() == tag)
+//        ui->listWidgetBooks->addItem(item);
 }
