@@ -4,16 +4,17 @@
 #include <QSqlDatabase>
 #include <QMutex>
 
-class ConnectionFactory
+// TODO - make this singleton!
+class DatabaseConnection
 {
 private:
     QMutex mutex;
     QString file_db;
 
 public:
-    ConnectionFactory(QString file_db);
+    DatabaseConnection(QString file_db);
 
-    QSqlDatabase getDatabase(QString connectionName = QString("uithread"));
+    QSqlDatabase database(QString connectionName = QString("uithread"));
 
     QMutex* getMutex() { return &mutex;}
 };

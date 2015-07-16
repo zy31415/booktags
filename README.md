@@ -1,17 +1,19 @@
 
-	BookTags Electronic Books Manager
-	---------------------------------------
+# 			BookTags 
+	Electronic Books tagging and managing
+	-------------------------------------
 
-*	Introduction
+
+##	Introduction
 
 	BookTags is a tagging system for managing electronic books (pdfs, mobis, 
 	etc.).
 
 
-*	Installation & Licensing
+##	Installation & Licensing
     
     Please consult the INSTALL and COPYING files for more information.
 
-*	Author
+##	Author
 	
 	Yang Zhang (zy31415@gmail.com)

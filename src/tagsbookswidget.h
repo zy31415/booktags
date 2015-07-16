@@ -5,6 +5,7 @@
 #include <QWidget>
 
 #include "currentdirectoryconfigurer.h"
+#include "tagslistmodel.h"
 
 namespace Ui {
 class TagsBooksWidget;
@@ -29,6 +30,8 @@ public:
 
 private:
     Ui::TagsBooksWidget *ui;
+
+    TagsListModel *tagsList_;
 
 private slots:
 

@@ -11,7 +11,7 @@ class InitialLoadThread : public QThread
     Q_OBJECT
 
 private:
-    ConnectionFactory* conn_;
+    DatabaseConnection* conn_;
     QString dir;
 
     int countNumOfFiles();
@@ -19,7 +19,7 @@ private:
 public:
     InitialLoadThread(
             QString dir,
-            ConnectionFactory* conn_,
+            DatabaseConnection* conn_,
             QObject* parent=0);
 
     void run();

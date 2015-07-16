@@ -9,6 +9,7 @@
 #include <QMessageBox>
 #include <QStandardItem>
 #include <QDebug>
+#include <QStringListModel>
 
 #include "filetree.h"
 
@@ -18,8 +19,12 @@ TagsBooksWidget::TagsBooksWidget(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    tagsList_ = new TagsListModel(this);
+    ui->
+
+
     // when different tags are selected
-    connect(ui->listWidgetTags, SIGNAL(itemSelectionChanged()), parentWidget(), SLOT(changeTagSelection()));
+    connect(ui->listViewTags, SIGNAL(itemSelectionChanged()), parentWidget(), SLOT(changeTagSelection()));
 
     // when you try to add a tag:
     connect(this, SIGNAL(tagAdded(QString)), parentWidget(), SLOT(addTag(QString)));
@@ -34,19 +39,25 @@ TagsBooksWidget::~TagsBooksWidget()
 }
 
 QString TagsBooksWidget::getSelectedTag() {
-    return ui->listWidgetTags->selectedItems()[0]->text();
+    QModelIndexList index = ui->listViewTags->selectionModel()->selectedIndexes();
+    return ui->listViewTags->model()->data(index[0], Qt::DisplayRole).toString();
 }
 
 
-// TODO - Change to Model/View structure.
+// TODO - Change to Model/View structure. Define your own Model.
 void TagsBooksWidget::updateTagsList(QStringList tags) {
     // disconnect the ralted signal first, otherwise the program will crash.
-    disconnect(ui->listWidgetTags, SIGNAL(itemSelectionChanged()), parentWidget(), SLOT(changeTagSelection()));
-    ui->listWidgetTags->clear();
+    disconnect(ui->listViewTags, SIGNAL(itemSelectionChanged()), parentWidget(), SLOT(changeTagSelection()));
 
-    ui->listWidgetTags->addItems(tags);
-    connect(ui->listWidgetTags, SIGNAL(itemSelectionChanged()), parentWidget(), SLOT(changeTagSelection()));
-    ui->listWidgetTags->setCurrentRow(0);
+    QStringListModel* tags_ = new QStringListModel(tags, this);
+
+    ui->listViewTags->setModel(tags_);
+
+//    ui->listWidgetTags->clear();
+
+//    ui->listWidgetTags->addItems(tags);
+    connect(ui->listViewTags, SIGNAL(itemSelectionChanged()), parentWidget(), SLOT(changeTagSelection()));
+    //ui->listViewTags->setCurrentRow(0);
 }
 
 void TagsBooksWidget::setCurrentDirectoryLabel(QString dir) {
@@ -62,6 +73,7 @@ void TagsBooksWidget::setCurrentDirectoryLabel(QString dir) {
 ///  TODO - Simplify the file viewing window.
 void TagsBooksWidget::updateBooksListView(QStringList books) {
 
+    // TODO - define your own model here for tree display of files. But you want to test your model first.
     QStandardItemModel* model_ = new QStandardItemModel(this);
     QStandardItem *parentItem = model_->invisibleRootItem();
 

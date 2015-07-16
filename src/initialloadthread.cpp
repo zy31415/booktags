@@ -8,7 +8,7 @@
 
 InitialLoadThread::InitialLoadThread(
         QString dir,
-        ConnectionFactory* conn_,
+        DatabaseConnection* conn_,
         QObject* parent) :
     QThread(parent),
     dir(dir),
@@ -16,7 +16,7 @@ InitialLoadThread::InitialLoadThread(
 {}
 
 void InitialLoadThread::run() {
-    QSqlDatabase db = conn_->getDatabase(QString("initialloadthread"));
+    QSqlDatabase db = conn_->database(QString("initialloadthread"));
     db.open();
 
     QMutex* mutex_ = conn_->getMutex();
