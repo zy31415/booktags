@@ -1,4 +1,3 @@
-/** @file */
 #include "tagsbookswidget.h"
 #include "ui_tagsbookswidget.h"
 
@@ -19,8 +18,8 @@ TagsBooksWidget::TagsBooksWidget(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    tagsList_ = new TagsListModel(this);
-    ui->
+    tagsList_ = new TagsListModel(this);    
+    ui->listViewTags->setModel(tagsList_);
 
 
     // when different tags are selected
@@ -95,38 +94,38 @@ void TagsBooksWidget::on_pushButtonAddTag_clicked()
 }
 
 void TagsBooksWidget::addTag(QString tag) {
-    ui->listWidgetTags->setCurrentItem(
-                new QListWidgetItem(tag, ui->listWidgetTags)
-                );
+//    ui->listWidgetTags->setCurrentItem(
+//                new QListWidgetItem(tag, ui->listWidgetTags)
+//                );
 }
 
 void TagsBooksWidget::on_pushButtonRemoveTag_clicked()
 {
-    QListWidgetItem* item_ = ui->listWidgetTags->selectedItems()[0];
+//    QListWidgetItem* item_ = ui->listWidgetTags->selectedItems()[0];
 
-    if (item_->text().trimmed() == QString("all")) {
-        QMessageBox::warning(this,
-                            QString("Deletion error"),
-                            QString("Keep the tag \"all\"."));
-        return;
-    }
+//    if (item_->text().trimmed() == QString("all")) {
+//        QMessageBox::warning(this,
+//                            QString("Deletion error"),
+//                            QString("Keep the tag \"all\"."));
+//        return;
+//    }
 
-    QString message = QString("Are you sure to delete tag: \"%1\" ?").arg(item_->text());
+//    QString message = QString("Are you sure to delete tag: \"%1\" ?").arg(item_->text());
 
-    QMessageBox::StandardButton reply = QMessageBox::question(
-                this, "Delete tag", message,
-                QMessageBox::Yes|QMessageBox::No);
+//    QMessageBox::StandardButton reply = QMessageBox::question(
+//                this, "Delete tag", message,
+//                QMessageBox::Yes|QMessageBox::No);
 
 
-    if (reply == QMessageBox::Yes)
-        emit selectionDeleted();
+//    if (reply == QMessageBox::Yes)
+//        emit selectionDeleted();
 }
 
 ///
 /// \brief Delete selected tag.
 ///
 void TagsBooksWidget::deleteSelection() {
-    delete ui->listWidgetTags->selectedItems()[0];
+//    delete ui->listWidgetTags->selectedItems()[0];
 }
 
 ///

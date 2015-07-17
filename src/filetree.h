@@ -1,6 +1,10 @@
-/// \file filetree.h
-/// This header defines functions that are used to create a tree Model for paths.
-/// \author Yang Zhang
+/**
+ *  \file filetree.h
+ * This header defines functions that turn a file path to a tree model.
+ *
+ * \author Yang Zhang
+ *
+ */
 
 
 #ifndef FILETREE_H
@@ -11,10 +15,10 @@
 #include <QStringList>
 #include <QStandardItem>
 
-QIcon* getIcon(QString file);
+
 
 void create_node(QStandardItem* root, QStringList splitted_path, int from);
 
-void add_path(QStandardItem* root, QString path);
+
 
 #endif

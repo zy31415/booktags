@@ -1,3 +1,8 @@
+/**
+ */
+
+
+
 #ifndef CURRENTDIRECTORYCONFIGURER_H
 #define CURRENTDIRECTORYCONFIGURER_H
 
@@ -5,7 +10,7 @@
 #include <QStringList>
 #include <QObject>
 
-#include "connectionfactory.h"
+#include "databaseconnection.h"
 
 class CurrentDirectoryConfigurer : public QObject
 {
@@ -14,7 +19,7 @@ class CurrentDirectoryConfigurer : public QObject
 private:
     QString dir, dir_config, path_database;
 
-    ConnectionFactory* conn_;
+    DatabaseConnection* conn_;
 
 public:
     explicit CurrentDirectoryConfigurer(QString dir, QObject *parent = 0);

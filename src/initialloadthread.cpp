@@ -19,7 +19,7 @@ void InitialLoadThread::run() {
     QSqlDatabase db = conn_->database(QString("initialloadthread"));
     db.open();
 
-    QMutex* mutex_ = conn_->getMutex();
+    QMutex* mutex_ = conn_->mutex();
 
     QSqlQuery q(db);
 

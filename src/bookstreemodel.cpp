@@ -1,38 +1,40 @@
-/** @file filetree.cpp
-*/
+#include "bookstreemodel.h"
+
 #include "filetree.h"
 
-#include <QFileInfo>
-#include <QDebug>
+BooksTreeModel::BooksTreeModel(QObject* parent) :
+    QStandardItemModel(parent)
+{
 
-///
-/// \brief Return an icon according for the input file format.
-/// \param input file path
-/// \return A pointer to the icon.
-///
-QIcon* getIcon(QString file) {
-    if (QFileInfo(file).suffix() == "")
-        return new QIcon(":/icons/directory.png");
-
-    if (QFileInfo(file).suffix().toLower() == "pdf")
-        return new QIcon(":/icons/pdf.png");
-
-    if (QFileInfo(file).suffix().toLower() == "mobi")
-        return new QIcon(":/icons/mobi.png");
-
-    if (QFileInfo(file).suffix().toLower() == "epub")
-        return new QIcon(":/icons/epub.png");
-
-    return new QIcon(":/icons/file.png");;
 }
 
-///
-/// \brief Actually create a file path nodes.
-/// \param root
-/// \param splitted_path
-/// \param from
-///
-void create_node(QStandardItem* root, QStringList splitted_path, int from) {
+
+void BooksTreeModel::setBooks(const QStringList& path) {
+    QStandardItem* root = invisibleRootItem();
+
+    foreach (QString p, path)
+        add_path(root, path);
+}
+
+
+QIcon* BooksTreeModel::getIcon(QString file) {
+    if (QFileInfo(file).suffix() == "")
+        return &icon_dir;
+
+    if (QFileInfo(file).suffix().toLower() == "pdf")
+        return &icon_pdf;
+
+    if (QFileInfo(file).suffix().toLower() == "mobi")
+        return &icon_mobi;
+
+    if (QFileInfo(file).suffix().toLower() == "epub")
+        return &icon_epub;
+
+    return &icon_file;
+}
+
+
+void BooksTreeModel::create_node(QStandardItem* root, QStringList splitted_path, int from) {
 
     QStandardItem* parentItem = root;
 
@@ -46,13 +48,8 @@ void create_node(QStandardItem* root, QStringList splitted_path, int from) {
     }
 }
 
-///
-/// \brief Add an QStandardItem to the model.
-/// \param root QStandardItem
-/// \param path
-///
-///
-void add_path(QStandardItem* root, QString path) {
+
+void BooksTreeModel::add_path(QStandardItem* root, QString path) {
     qDebug() <<path;
     QStandardItem* parentItem = root;
 
@@ -85,3 +82,4 @@ void add_path(QStandardItem* root, QString path) {
 
     create_node(parentItem, splitted_path, ii);
 }
+

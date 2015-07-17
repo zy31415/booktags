@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QThread>
 
-#include "connectionfactory.h"
+#include "databaseconnection.h"
 
 class InitialLoadThread : public QThread
 {

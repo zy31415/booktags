@@ -1,3 +1,9 @@
+/** \file tagsbookswidget.h
+ * Define a widget TagsBooksWidget which contains a tags list and a books list.
+ *
+ * \author Yang Zhang
+ */
+
 #ifndef TAGSBOOKSWIDGET_H
 #define TAGSBOOKSWIDGET_H
 
