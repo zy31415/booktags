@@ -67,6 +67,9 @@ void CurrentDirectoryConfigurer::initDatabase() {
 
 }
 
+// TODO - carefully think about the design of this multithreading process.
+//          Avoid using parent() -  this is not a good design.
+//
 void CurrentDirectoryConfigurer::loadAllBooksIntoDatabase() {
     InitialLoadThread* thread_ = new InitialLoadThread(dir, conn_, this);
 
@@ -95,15 +98,15 @@ QStringList CurrentDirectoryConfigurer::getTags() {
 
     mutex->lock();
     QUERY_EXEC(query, cmd);
-    mutex->unlock();
-
-    db.close(); // for close connection
+    mutex->unlock();    
 
     QStringList out;
 
     while(query.next()) {
         out << query.value(0).toString();
     }
+
+    db.close(); // for close connection
 
     return out;
 }
@@ -131,6 +134,28 @@ QStringList CurrentDirectoryConfigurer::getFiles(const QString& tag) {
     db.close(); // close connection
 
     return out;
+}
+
+bool CurrentDirectoryConfigurer::hasTag(const QString& tag) {
+    QSqlDatabase db = conn_->database();
+    db.open();
+    QSqlQuery query(db);
+    QString cmd = QString("select exists (select tag from tb_tags where tag=\"%1\");").arg(tag.trimmed());
+
+    QMutex* mutex = conn_->mutex();
+    mutex->lock();
+    QUERY_EXEC(query, cmd);
+    mutex->unlock();
+
+    bool res;
+    if (query.next())
+        res = query.value(0).toBool();
+    else
+        qDebug() << "Something wrong.";
+
+    db.close(); // for close connection
+
+    return res;
 }
 
 void CurrentDirectoryConfigurer::addTag(QString tag) {

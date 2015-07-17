@@ -41,13 +41,31 @@ private slots:
     void onCurrentDirectoryChange();
 
 public slots:
+
+    ///
+    /// \brief Add a tag into database;
+    /// \param tag tag added
+    ///
     void addTag(const QString& tag);
-    void deleteSelection();
+
+    ///
+    /// \brief Delete tag from database;
+    ///
+    void deleteSelection(const QString& tag);
+
     void changeStatusBarMessage(QString msg);
     void updateTagsBooksWidget();
     void setStatusBarForInitialLoading(int max);
     void updateStatusBarForInitialLoading(int current, QString file);
-    void changeTagSelection();
+
+    ///
+    /// \brief When a new tag selected
+    /// \param tag new tag selected
+    ///
+    /// This slot will read book attached to the new tag from the database
+    /// and update the books tree view.
+    ///
+    void changeTagSelection(const QString& tag);
 };
 
 #endif // MAINWINDOW_H

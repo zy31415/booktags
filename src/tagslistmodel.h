@@ -13,13 +13,18 @@ class TagsListModel : public QStringListModel
 
 public:
     TagsListModel(QObject* parent);
-    void setTagsList(const QStringList& tags);
+
+    ///
+    /// \brief Append a list of tags to the tags list.
+    /// \param tags tags list that will be appended.
+    ///
+    void appendTags(const QStringList& tags);
 
     ///
     /// \brief Append a tag to the tags list.
-    /// \param tag that will be appended.
+    /// \param tag tag that will be appended.
     ///
-    void appendString(const QString& tag);
+    void appendTag(const QString& tag);
 
 private:
     ///

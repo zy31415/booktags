@@ -1,4 +1,4 @@
-/**
+/** \file
  */
 
 
@@ -33,6 +33,13 @@ public:
 
     void addTag(QString tag);
     void removeTag(QString tag);
+
+    ///
+    /// \brief If the tag in the database.
+    /// \param tag
+    /// \return true - yes, false - no
+    ///
+    bool hasTag(const QString& tag);
 };
 
 #endif // CURRENTDIRECTORYCONFIGURER_H

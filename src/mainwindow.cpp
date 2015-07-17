@@ -17,7 +17,7 @@
 #include "settingsdialog.h"
 #include "currentdirectorydialog.h"
 
-
+// TODO - handle matches: click tag to select books, click book to select tags.
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
@@ -35,6 +35,13 @@ MainWindow::MainWindow(QWidget *parent) :
     tbWidget_ = new TagsBooksWidget(this);
     setCentralWidget(tbWidget_);
 
+    connect(tbWidget_, SIGNAL(tagSelected(QString)),
+            this, SLOT(changeTagSelection(QString)));
+    connect(tbWidget_, SIGNAL(tagDeleted(QString)),
+            this, SLOT(deleteSelection(QString)));
+    connect(tbWidget_, SIGNAL(tagAdded(QString)),
+            this, SLOT(addTag(QString)));
+
     onCurrentDirectoryChange();
 }
 
@@ -50,8 +57,6 @@ MainWindow::~MainWindow()
 QString MainWindow::getCurrentDirectory() {
     return configFile_ -> getCurrentDirectory();
 }
-
-
 
 void MainWindow::on_action_About_triggered()
 {
@@ -83,28 +88,34 @@ void MainWindow::onCurrentDirectoryChange() {
                 getCurrentDirectory(),
                 this);
 
-    tbWidget_->updateTagsList(configCurrentDir_->getTags());
+    QStringList tags = configCurrentDir_->getTags();
+    qDebug() << tags;
+
+    tbWidget_->updateTagsList(tags);
 
     // update Main Widget title
     tbWidget_ ->setCurrentDirectoryLabel(getCurrentDirectory());
 }
 
-// TODO - This progress can be very slow. Can you use multi-threading?
-void MainWindow::changeTagSelection() {
-    QStringList files = configCurrentDir_->getFiles(tbWidget_->getSelectedTag());
-    tbWidget_->updateBooksListView(files);
+void MainWindow::changeTagSelection(const QString& tag) {
+    QStringList files = configCurrentDir_->getFiles(tag);
+    tbWidget_->updateBooksTree(files);
 }
 
 void MainWindow::addTag(const QString& tag) {
-    // TODO : check if the tag is a valid tag.
-    //      if Yes:
-    configCurrentDir_->addTag(tag);
-    tbWidget_->addTag(tag);
+    if (configCurrentDir_->hasTag(tag)) {
+        QMessageBox::warning(this,
+                             QString("Tag exists."),
+                             QString("Tag already exists."));
+        return;
+    }
+
+    configCurrentDir_->addTag(tag);    
+    tbWidget_->appendTag(tag);
 }
 
-void MainWindow::deleteSelection() {
-    configCurrentDir_->removeTag(tbWidget_->getSelectedTag());
-    tbWidget_->deleteSelection();
+void MainWindow::deleteSelection(const QString& tag) {
+    configCurrentDir_->removeTag(tag);
 }
 
 void MainWindow::changeStatusBarMessage(QString msg) {

@@ -20,22 +20,16 @@ TagsBooksWidget::TagsBooksWidget(QWidget *parent) :
 
     tagsList_ = new TagsListModel(this);    
     ui->listViewTags->setModel(tagsList_);
+    tagSelection_ = ui->listViewTags->selectionModel();
 
     booksTree_ = new BooksTreeModel(this);
     ui->treeViewBooks->setModel(booksTree_);
+    bookSelection_ = ui->treeViewBooks->selectionModel();
 
 
     // when different tags are selected
-    connect(ui->listViewTags->selectionModel(),
-            SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
-            this,
-            SLOT(changeTagSelection(const QItemSelection&, const QItemSelection&)));
+    connectTagSelectionSignal();
 
-    // when you try to add a tag:
-    connect(this, SIGNAL(tagAdded(QString)), parentWidget(), SLOT(addTag(QString)));
-
-    // when you try to delete a tag:
-    connect(this, SIGNAL(selectionDeleted()), parentWidget(), SLOT(deleteSelection()));
 }
 
 TagsBooksWidget::~TagsBooksWidget()
@@ -43,40 +37,62 @@ TagsBooksWidget::~TagsBooksWidget()
     delete ui;
 }
 
-QString TagsBooksWidget::getSelectedTag() {
-    QModelIndexList index = ui->listViewTags->selectionModel()->selectedIndexes();
-    return ui->listViewTags->model()->data(index[0], Qt::DisplayRole).toString();
+void TagsBooksWidget::connectTagSelectionSignal() {
+    connect(tagSelection_,
+            SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
+            this,
+            SLOT(changeTagSelection(const QItemSelection&, const QItemSelection&)));
+
 }
 
-
+///
+/// \brief Update the tags list.
+/// \param tags
+///
+/// Do the following things:
+///     1. Delete old tags list and create a new tags list;
+///     2. Delete the old selection model and connect to the new selection model.
+///     3. Update the signal connection of the selection model.
+///
 void TagsBooksWidget::updateTagsList(QStringList tags) {
     tagsList_->deleteLater();
-    tagsList_ = new TagsListModel(this);
-    tagsList_->setTagsList(tags);
 
+    tagsList_ = new TagsListModel(this);
+    tagsList_->appendTags(tags);
     ui->listViewTags->setModel(tagsList_);
 
-    ui->listViewTags->selectionModel()->setCurrentIndex(tagsList_->index(0),QItemSelectionModel::Current);
+    tagSelection_->deleteLater();
+    tagSelection_ = ui->listViewTags->selectionModel();
 
-    //ui->listViewTags->setCurrentRow(0);
+    // Update the signal connection for the new selection model.
+    connectTagSelectionSignal();
+
+    tagSelection_->setCurrentIndex(tagsList_->index(0),QItemSelectionModel::Select);
 }
 
-void TagsBooksWidget::setCurrentDirectoryLabel(QString dir) {
-    ui->labelCurrentDir->setText("Current Directory: " + dir);
-}
-
 ///
-/// \brief This method updates the books view according to the input.
-/// \param books book paths used to update the book view.
+/// \brief Update the books tree.
+/// \param tags
 ///
-/// This function is called by the MainWindow.
+/// Do the following things:
+///     1. Delete old books tree and create a new books tree;
+///     2. Delete the old selection model and connect to the new selection model.
+///     3. Update the signal connection of the selection model.
 ///
-void TagsBooksWidget::updateBooksListView(QStringList books) {
+void TagsBooksWidget::updateBooksTree(QStringList books) {
     booksTree_->deleteLater();
 
     booksTree_ = new BooksTreeModel(this);
     booksTree_->appendBooks(books);
     ui->treeViewBooks->setModel(booksTree_);
+
+    bookSelection_ -> deleteLater();
+    bookSelection_ = ui->treeViewBooks->selectionModel();
+
+}
+
+void TagsBooksWidget::setCurrentDirectoryLabel(QString dir) {
+    ui->labelCurrentDir->setText("Current Directory: " + dir);
 }
 
 void TagsBooksWidget::on_pushButtonAddTag_clicked()
@@ -90,37 +106,43 @@ void TagsBooksWidget::on_pushButtonAddTag_clicked()
     }
 }
 
-void TagsBooksWidget::addTag(QString tag) {
-    tagsList_->appendString(tag);
-}
-
 void TagsBooksWidget::on_pushButtonRemoveTag_clicked()
 {
-//    QListWidgetItem* item_ = ui->listWidgetTags->selectedItems()[0];
+    QModelIndexList idx;
 
-//    if (item_->text().trimmed() == QString("all")) {
-//        QMessageBox::warning(this,
-//                            QString("Deletion error"),
-//                            QString("Keep the tag \"all\"."));
-//        return;
-//    }
+    if(tagSelection_->hasSelection())
+         idx = tagSelection_->selectedIndexes();
+    else {
+        QMessageBox::warning(this,
+                             QString("Deletion error"),
+                             QString("Select a tag first."));
+        return;
+    }
 
-//    QString message = QString("Are you sure to delete tag: \"%1\" ?").arg(item_->text());
+     if (idx.length()!= 1) {
+         qDebug() << "Selection error.";
+         return;
+     }
 
-//    QMessageBox::StandardButton reply = QMessageBox::question(
-//                this, "Delete tag", message,
-//                QMessageBox::Yes|QMessageBox::No);
+     QString tag = idx[0].data(Qt::DisplayRole).toString();
 
+     if (tag == QString("all")) {
+         QMessageBox::warning(this,
+                             QString("Deletion error"),
+                             QString("Keep the tag \"all\"."));
+         return;
+     }
 
-//    if (reply == QMessageBox::Yes)
-//        emit selectionDeleted();
-}
+     QString message = QString("Are you sure to delete tag: \"%1\" ?").arg(tag);
 
-///
-/// \brief Delete selected tag.
-///
-void TagsBooksWidget::deleteSelection() {
-//    delete ui->listWidgetTags->selectedItems()[0];
+     QMessageBox::StandardButton reply = QMessageBox::question(
+                 this, "Delete tag", message,
+                 QMessageBox::Yes|QMessageBox::No);
+
+     if (reply == QMessageBox::Yes) {
+         tagsList_->removeRow(idx.at(0).row());
+         emit tagDeleted(tag);
+     }
 }
 
 ///
@@ -133,11 +155,16 @@ void TagsBooksWidget::addOneBookToTag(QString item, QString tag) {
 //        ui->listWidgetBooks->addItem(item);
 }
 
-// TODO - handle selection.
 void TagsBooksWidget::changeTagSelection(const QItemSelection& selected,
                                          const QItemSelection& deselected) {
 
-    // TODO - make sure only one is selected.
-    selected.first()
+    QString tag = selected.indexes()[0].data(Qt::DisplayRole).toString();
 
+    emit tagSelected(tag);
+
+}
+
+
+void TagsBooksWidget::appendTag(QString tag) {
+    tagsList_->appendTag(tag);
 }
