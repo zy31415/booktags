@@ -26,7 +26,10 @@ TagsBooksWidget::TagsBooksWidget(QWidget *parent) :
 
 
     // when different tags are selected
-    connect(ui->listViewTags, SIGNAL(itemSelectionChanged()), parentWidget(), SLOT(changeTagSelection()));
+    connect(ui->listViewTags->selectionModel(),
+            SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
+            this,
+            SLOT(changeTagSelection(const QItemSelection&, const QItemSelection&)));
 
     // when you try to add a tag:
     connect(this, SIGNAL(tagAdded(QString)), parentWidget(), SLOT(addTag(QString)));
@@ -46,19 +49,15 @@ QString TagsBooksWidget::getSelectedTag() {
 }
 
 
-// TODO - Change to Model/View structure. Define your own Model.
 void TagsBooksWidget::updateTagsList(QStringList tags) {
-    // disconnect the ralted signal first, otherwise the program will crash.
-    disconnect(ui->listViewTags, SIGNAL(itemSelectionChanged()), parentWidget(), SLOT(changeTagSelection()));
+    tagsList_->deleteLater();
+    tagsList_ = new TagsListModel(this);
+    tagsList_->setTagsList(tags);
 
-    QStringListModel* tags_ = new QStringListModel(tags, this);
+    ui->listViewTags->setModel(tagsList_);
 
-    ui->listViewTags->setModel(tags_);
+    ui->listViewTags->selectionModel()->setCurrentIndex(tagsList_->index(0),QItemSelectionModel::Current);
 
-//    ui->listWidgetTags->clear();
-
-//    ui->listWidgetTags->addItems(tags);
-    connect(ui->listViewTags, SIGNAL(itemSelectionChanged()), parentWidget(), SLOT(changeTagSelection()));
     //ui->listViewTags->setCurrentRow(0);
 }
 
@@ -72,12 +71,11 @@ void TagsBooksWidget::setCurrentDirectoryLabel(QString dir) {
 ///
 /// This function is called by the MainWindow.
 ///
-///  TODO - Simplify the file viewing window.
 void TagsBooksWidget::updateBooksListView(QStringList books) {
     booksTree_->deleteLater();
 
     booksTree_ = new BooksTreeModel(this);
-    booksTree_->setBooks(books);
+    booksTree_->appendBooks(books);
     ui->treeViewBooks->setModel(booksTree_);
 }
 
@@ -93,9 +91,7 @@ void TagsBooksWidget::on_pushButtonAddTag_clicked()
 }
 
 void TagsBooksWidget::addTag(QString tag) {
-//    ui->listWidgetTags->setCurrentItem(
-//                new QListWidgetItem(tag, ui->listWidgetTags)
-//                );
+    tagsList_->appendString(tag);
 }
 
 void TagsBooksWidget::on_pushButtonRemoveTag_clicked()
@@ -135,4 +131,13 @@ void TagsBooksWidget::deleteSelection() {
 void TagsBooksWidget::addOneBookToTag(QString item, QString tag) {
 //    if (ui->listWidgetTags->selectedItems()[0]->text() == tag)
 //        ui->listWidgetBooks->addItem(item);
+}
+
+// TODO - handle selection.
+void TagsBooksWidget::changeTagSelection(const QItemSelection& selected,
+                                         const QItemSelection& deselected) {
+
+    // TODO - make sure only one is selected.
+    selected.first()
+
 }

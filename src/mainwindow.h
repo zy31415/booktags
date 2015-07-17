@@ -39,7 +39,6 @@ private slots:
     void on_actionOpenDirectory_triggered();
     void on_action_Settings_triggered();
     void onCurrentDirectoryChange();
-    void changeTagSelection();
 
 public slots:
     void addTag(const QString& tag);
@@ -48,6 +47,7 @@ public slots:
     void updateTagsBooksWidget();
     void setStatusBarForInitialLoading(int max);
     void updateStatusBarForInitialLoading(int current, QString file);
+    void changeTagSelection();
 };
 
 #endif // MAINWINDOW_H

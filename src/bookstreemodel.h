@@ -21,28 +21,35 @@ private:
     /// \param input file path
     /// \return A pointer to the icon.
     ///
-    static QIcon* getIcon(QString file);
+    static QIcon* getIcon(const QString& file);
 
     ///
-    /// \brief Actually create a file path nodes.
+    /// \brief Actually create a nodes based on a file path. Used by appendBook.
     /// \param root
     /// \param splitted_path
-    /// \param from
+    /// \param from Create nodes from the position indicated by this parameter.
     ///
-    static void create_node(QStandardItem* root, QStringList splitted_path, int from);
-
-    ///
-    /// \brief Add an QStandardItem to the model.
-    /// \param root QStandardItem
-    /// \param path
-    ///
-    void add_path(QString path);
+    static void create_node(QStandardItem* root, const QStringList& splitted_path, const int from);
 
 
 public:
+    ///
+    /// \brief Constructor
+    /// \param parent parent object
+    ///
     BooksTreeModel(QObject* parent);
 
-    void setBooks(const QStringList& path);
+    ///
+    /// \brief Parse the path to a book and append it to the tree model.
+    /// \param path the path to the book
+    ///
+    void appendBook(const QString& path);
+
+    ///
+    /// \brief Parse paths to a list of books and append them to the tree model.
+    /// \param paths
+    ///
+    void appendBooks(const QStringList& paths);
 };
 
 #endif // BOOKSTREEMODEL_H

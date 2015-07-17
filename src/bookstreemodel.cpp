@@ -15,13 +15,7 @@ BooksTreeModel::BooksTreeModel(QObject* parent) :
 }
 
 
-void BooksTreeModel::setBooks(const QStringList& path) {
-    foreach (QString p, path)
-        add_path(p);
-}
-
-
-QIcon* BooksTreeModel::getIcon(QString file) {
+QIcon* BooksTreeModel::getIcon(const QString& file) {
     if (QFileInfo(file).suffix() == "")
         return &icon_dir;
 
@@ -38,7 +32,7 @@ QIcon* BooksTreeModel::getIcon(QString file) {
 }
 
 
-void BooksTreeModel::create_node(QStandardItem* root, QStringList splitted_path, int from) {
+void BooksTreeModel::create_node(QStandardItem* root, const QStringList& splitted_path, const int from) {
 
     QStandardItem* parentItem = root;
 
@@ -53,8 +47,9 @@ void BooksTreeModel::create_node(QStandardItem* root, QStringList splitted_path,
 }
 
 
-void BooksTreeModel::add_path(QString path) {
+void BooksTreeModel::appendBook(const QString& path) {
     QStandardItem* root = invisibleRootItem();
+
     QStandardItem* parentItem = root;
 
     QStringList splitted_path = path.split("/", QString::SkipEmptyParts);
@@ -87,3 +82,7 @@ void BooksTreeModel::add_path(QString path) {
     create_node(parentItem, splitted_path, ii);
 }
 
+void BooksTreeModel::appendBooks(const QStringList& path) {
+    foreach (QString p, path)
+        appendBook(p);
+}
