@@ -49,9 +49,6 @@ public:
 };
 
 
-///
-/// \brief Implementation of the static member: DatabaseConnection::m_mutex
-///
-QMutex DatabaseConnection::m_mutex;
+
 
 #endif // DATABASECONNECTION_H

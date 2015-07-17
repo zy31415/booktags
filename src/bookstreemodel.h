@@ -14,11 +14,7 @@ private:
     /// \brief Icons for different file types.
     /// These icons are defined as static member to avoid memory leak and large memory use for icons.
     ///
-    static QIcon icon_dir = QIcon(":/icons/directory.png");
-    static QIcon icon_pdf = QIcon(":/icons/pdf.png");
-    static QIcon icon_epub = QIcon(":/icons/epub.png");
-    static QIcon icon_mobi = QIcon(":/icons/mobi.png");
-    static QIcon icon_file = QIcon(":/icons/file.png");
+    static QIcon icon_dir, icon_pdf, icon_epub, icon_mobi, icon_file;
 
     ///
     /// \brief Return an icon based on the format of an input file.
@@ -40,8 +36,7 @@ private:
     /// \param root QStandardItem
     /// \param path
     ///
-    ///
-    static void add_path(QStandardItem* root, QString path);
+    void add_path(QString path);
 
 
 public:

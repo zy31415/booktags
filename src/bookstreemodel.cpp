@@ -1,6 +1,12 @@
 #include "bookstreemodel.h"
 
-#include "filetree.h"
+#include <QFileInfo>
+
+QIcon BooksTreeModel::icon_dir = QIcon(":/icons/directory.png");
+QIcon BooksTreeModel::icon_pdf = QIcon(":/icons/pdf.png");
+QIcon BooksTreeModel::icon_epub = QIcon(":/icons/epub.png");
+QIcon BooksTreeModel::icon_mobi = QIcon(":/icons/mobi.png");
+QIcon BooksTreeModel::icon_file = QIcon(":/icons/file.png");
 
 BooksTreeModel::BooksTreeModel(QObject* parent) :
     QStandardItemModel(parent)
@@ -10,10 +16,8 @@ BooksTreeModel::BooksTreeModel(QObject* parent) :
 
 
 void BooksTreeModel::setBooks(const QStringList& path) {
-    QStandardItem* root = invisibleRootItem();
-
     foreach (QString p, path)
-        add_path(root, path);
+        add_path(p);
 }
 
 
@@ -49,8 +53,8 @@ void BooksTreeModel::create_node(QStandardItem* root, QStringList splitted_path,
 }
 
 
-void BooksTreeModel::add_path(QStandardItem* root, QString path) {
-    qDebug() <<path;
+void BooksTreeModel::add_path(QString path) {
+    QStandardItem* root = invisibleRootItem();
     QStandardItem* parentItem = root;
 
     QStringList splitted_path = path.split("/", QString::SkipEmptyParts);

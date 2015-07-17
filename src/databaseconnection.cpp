@@ -1,5 +1,7 @@
 #include "databaseconnection.h"
 
+QMutex DatabaseConnection::m_mutex;
+
 DatabaseConnection::DatabaseConnection(const QString& file_db) : m_file_db(file_db)
 {
 }
@@ -18,6 +20,6 @@ QSqlDatabase DatabaseConnection::database(const QString& connectionName) {
     return db;
 }
 
-QMutex* QSqlDatabase::mutex() {
+QMutex* DatabaseConnection::mutex() {
     return &m_mutex;
 }

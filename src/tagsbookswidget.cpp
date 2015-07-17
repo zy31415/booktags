@@ -21,6 +21,9 @@ TagsBooksWidget::TagsBooksWidget(QWidget *parent) :
     tagsList_ = new TagsListModel(this);    
     ui->listViewTags->setModel(tagsList_);
 
+    booksTree_ = new BooksTreeModel(this);
+    ui->treeViewBooks->setModel(booksTree_);
+
 
     // when different tags are selected
     connect(ui->listViewTags, SIGNAL(itemSelectionChanged()), parentWidget(), SLOT(changeTagSelection()));
@@ -71,15 +74,11 @@ void TagsBooksWidget::setCurrentDirectoryLabel(QString dir) {
 ///
 ///  TODO - Simplify the file viewing window.
 void TagsBooksWidget::updateBooksListView(QStringList books) {
+    booksTree_->deleteLater();
 
-    // TODO - define your own model here for tree display of files. But you want to test your model first.
-    QStandardItemModel* model_ = new QStandardItemModel(this);
-    QStandardItem *parentItem = model_->invisibleRootItem();
-
-    foreach (QString file, books)
-        add_path(parentItem, file);
-
-    ui->treeViewBooks->setModel(model_);
+    booksTree_ = new BooksTreeModel(this);
+    booksTree_->setBooks(books);
+    ui->treeViewBooks->setModel(booksTree_);
 }
 
 void TagsBooksWidget::on_pushButtonAddTag_clicked()

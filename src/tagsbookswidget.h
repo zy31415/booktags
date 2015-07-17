@@ -12,6 +12,7 @@
 
 #include "currentdirectoryconfigurer.h"
 #include "tagslistmodel.h"
+#include "bookstreemodel.h"
 
 namespace Ui {
 class TagsBooksWidget;
@@ -38,6 +39,7 @@ private:
     Ui::TagsBooksWidget *ui;
 
     TagsListModel *tagsList_;
+    BooksTreeModel *booksTree_;
 
 private slots:
 
