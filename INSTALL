@@ -2,6 +2,10 @@
 	BookTags Installation
 	---------------------
 
+	This software package can be found and downloaded at:
+		- http://zy31415.github.io/booktags
+
+
 	To build and install BookTags, type the following commands:
 	
 	$ mkdir build/

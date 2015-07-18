@@ -2,7 +2,7 @@
 # 			BookTags 
 	Electronic Books tagging and managing
 	-------------------------------------
-
+    [booktags](http://zy31415.github.io/booktags)
 
 ##	Introduction
 
@@ -34,3 +34,4 @@
 ##	Author
 	
 	Yang Zhang (zy31415@gmail.com)
+	https://github.com/zy31415
