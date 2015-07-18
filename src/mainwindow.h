@@ -28,7 +28,7 @@ private:
     Ui::MainWindow *ui;
     ProgramConfigFile* configFile_;
 
-    DirectoryDatabase* configCurrentDir_;
+    DirectoryDatabase* dirDB_;
 
     TagsBooksWidget* tbWidget_;
     QProgressBar* qProgressBar_;
@@ -66,6 +66,11 @@ public slots:
     /// and update the books tree view.
     ///
     void changeTagSelection(const QString& tag);
+
+    ///
+    /// \brief This slot is called when the initial database load finished.
+    ///
+    void finishInitialDatabaseLoad();
 };
 
 #endif // MAINWINDOW_H

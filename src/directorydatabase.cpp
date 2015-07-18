@@ -74,13 +74,16 @@ void DirectoryDatabase::loadAllBooksIntoDatabase() {
     InitialLoadThread* thread_ = new InitialLoadThread(dir, conn_, this);
 
     connect(thread_, SIGNAL(finished()), thread_, SLOT(deleteLater()));
-    connect(thread_, SIGNAL(initialLoadStarted(int)),
-            parent(), SLOT(setStatusBarForInitialLoading(int)));
-    connect(thread_, SIGNAL(oneItemAdded(int,QString)),
-            parent(), SLOT(updateStatusBarForInitialLoading(int, QString)));
 
-    connect(thread_, SIGNAL(statusBarMessageChanged(QString)),
-            parent(), SLOT(changeStatusBarMessage(QString)));
+    connect(thread_, &InitialLoadThread::started,
+            this, &DirectoryDatabase::initialDatabaseLoadStarted);
+
+    // forward the signal oneBookAdded
+    connect(thread_, &InitialLoadThread::oneItemAdded,
+            this, &DirectoryDatabase::oneBookAdded);
+
+    connect(thread_, &InitialLoadThread::finished,
+            this, &DirectoryDatabase::initialDatabaseLoadFinished);
 
     thread_->start();
 
@@ -188,3 +191,4 @@ void DirectoryDatabase::removeTag(QString tag) {
 
     db.close(); // for close connection
 }
+

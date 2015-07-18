@@ -25,7 +25,7 @@ void InitialLoadThread::run() Q_DECL_OVERRIDE {
 
     int total = countNumOfFiles();
 
-    emit initialLoadStarted(total);
+    emit started(total);
 
     int nth = 0;
     QDirIterator it(dir, QDirIterator::Subdirectories);
@@ -49,7 +49,6 @@ void InitialLoadThread::run() Q_DECL_OVERRIDE {
             emit oneItemAdded(nth, path);
         }
     }
-    emit finished();
 }
 
 int InitialLoadThread::countNumOfFiles() {

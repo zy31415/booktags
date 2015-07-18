@@ -60,7 +60,7 @@ signals:
     /// \brief This signal is emitted when the initial load started. The number of books is passed as the parameter.
     /// \param max Number of books
     ///
-    void initialLoadStarted(int max);
+    void started(int max);
 
     ///
     /// \brief This signal is emitted when one book is added into the database.
@@ -69,10 +69,6 @@ signals:
     ///
     void oneItemAdded(int current, QString file);
 
-    ///
-    /// \brief This signal will be emitted when the loading process is over.
-    ///
-    void finished();
 };
 
 #endif // INITIALLOADTHREAD_H

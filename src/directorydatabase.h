@@ -77,6 +77,24 @@ public:
     /// \return true - yes, false - no
     ///
     bool hasTag(const QString& tag);
+
+public slots:
+
+signals:
+    ///
+    /// \brief This signal will be emitted when the initial load of database is finished.
+    ///
+    void initialDatabaseLoadFinished();
+
+    ///
+    /// \brief This signal will be emitted when the initial load of database is started.
+    ///
+    void initialDatabaseLoadStarted(int);
+
+    ///
+    /// \brief This signal will be emitted when the one book added during the inital load of the database.
+    ///
+    void initialDatabaseLoadOneBookAdded(int, QString);
 };
 
 #endif // DIRECTORYDATABASE_H

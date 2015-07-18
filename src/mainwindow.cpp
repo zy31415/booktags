@@ -21,7 +21,7 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-    configCurrentDir_(0)
+    dirDB_(0)
 {
     ui->setupUi(this);
 
@@ -46,7 +46,7 @@ MainWindow::~MainWindow()
 {
     delete ui;
     delete configFile_;
-    delete configCurrentDir_;
+    delete dirDB_;
 }
 
 
@@ -78,15 +78,26 @@ void MainWindow::on_action_Settings_triggered()
 }
 
 void MainWindow::onCurrentDirectoryChange() {
-    if (configCurrentDir_ != 0)
-        delete configCurrentDir_;
+    if (dirDB_ != 0)
+        dirDB_->deleteLater();
 
-    configCurrentDir_ = new DirectoryDatabase(
+    /// Initialize dirDB_, and set up the connection between dirDB_ and the mainwindow.
+    dirDB_ = new DirectoryDatabase(
                 getCurrentDirectory(),
                 this);
 
-    QStringList tags = configCurrentDir_->getTags();
-    qDebug() << tags;
+    connect(dirDB_, SIGNAL(initialDatabaseLoadStarted(int)),
+            this, SLOT(setStatusBarForInitialLoading(int)));
+
+    connect(dirDB_, SIGNAL(initialDatabaseLoadFinished()),
+            this, SLOT(finishInitialDatabaseLoad()));
+
+    connect(dirDB_, SIGNAL(oneBookAdded(int,QString)),
+            this, SLOT(updateStatusBarForInitialLoading(int, QString)));
+
+
+    /// Initial load of list of tags
+    QStringList tags = dirDB_->getTags();
 
     tbWidget_->updateTagsList(tags);
 
@@ -95,24 +106,24 @@ void MainWindow::onCurrentDirectoryChange() {
 }
 
 void MainWindow::changeTagSelection(const QString& tag) {
-    QStringList files = configCurrentDir_->getFiles(tag);
+    QStringList files = dirDB_->getFiles(tag);
     tbWidget_->updateBooksTree(files);
 }
 
 void MainWindow::addTag(const QString& tag) {
-    if (configCurrentDir_->hasTag(tag)) {
+    if (dirDB_->hasTag(tag)) {
         QMessageBox::warning(this,
                              QString("Tag exists."),
                              QString("Tag already exists."));
         return;
     }
 
-    configCurrentDir_->addTag(tag);    
+    dirDB_->addTag(tag);
     tbWidget_->appendTag(tag);
 }
 
 void MainWindow::deleteSelection(const QString& tag) {
-    configCurrentDir_->removeTag(tag);
+    dirDB_->removeTag(tag);
 }
 
 void MainWindow::changeStatusBarMessage(QString msg) {
@@ -120,7 +131,7 @@ void MainWindow::changeStatusBarMessage(QString msg) {
 }
 
 void MainWindow::updateTagsBooksWidget() {
-    tbWidget_->updateTagsList(configCurrentDir_->getTags());
+    tbWidget_->updateTagsList(dirDB_->getTags());
 
     // update Main Widget title
     tbWidget_ ->setCurrentDirectoryLabel(getCurrentDirectory());
@@ -141,4 +152,10 @@ void MainWindow::updateStatusBarForInitialLoading(int current, QString file) {
     ui->statusBar->showMessage(file);
 
     tbWidget_->addOneBookToTag(file, QString("all"));
+}
+
+void MainWindow::finishInitialDatabaseLoad(){
+    ui->statusBar->removeWidget(qProgressBar_);
+    qProgressBar_->deleteLater();
+    ui->statusBar->showMessage("Initial load finished!");
 }
