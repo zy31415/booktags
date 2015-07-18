@@ -15,7 +15,7 @@ InitialLoadThread::InitialLoadThread(
     conn_(conn_)
 {}
 
-void InitialLoadThread::run() {
+void InitialLoadThread::run() Q_DECL_OVERRIDE {
     QSqlDatabase db = conn_->database(QString("initialloadthread"));
     db.open();
 
@@ -49,7 +49,6 @@ void InitialLoadThread::run() {
             emit oneItemAdded(nth, path);
         }
     }
-    emit statusBarMessageChanged("Done!");
     emit finished();
 }
 

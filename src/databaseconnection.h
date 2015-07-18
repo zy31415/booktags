@@ -1,4 +1,5 @@
 /** \file databaseconnection.h
+ *
  * This header file defines the class DatabaseConnection which is used
  * to handle the database connection to sqlite3 databases.
  *

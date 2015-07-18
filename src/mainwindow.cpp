@@ -25,9 +25,6 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-
-    //layout()->addWidget(new StatusBar(this));
-
     configFile_ = new ProgramConfigFile;
     if (!configFile_->ifConfigFileExist())
         configFile_->initConfigFile();

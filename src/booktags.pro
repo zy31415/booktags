@@ -17,24 +17,24 @@ SOURCES += main.cpp\
     settingsdialog.cpp \
     programconfigfile.cpp \
     currentdirectorydialog.cpp \
-    currentdirectoryconfigurer.cpp \
     tagsbookswidget.cpp \
     initialloadthread.cpp \
     tagslistmodel.cpp \
     databaseconnection.cpp \
-    bookstreemodel.cpp
+    bookstreemodel.cpp \
+    directorydatabase.cpp
 
 HEADERS  += mainwindow.h \
     settingsdialog.h \
     programconfigfile.h \
     currentdirectorydialog.h \
-    currentdirectoryconfigurer.h \
     utils.h \
     tagsbookswidget.h \
     initialloadthread.h \
     tagslistmodel.h \
     databaseconnection.h \
-    bookstreemodel.h
+    bookstreemodel.h \
+    directorydatabase.h
 
 FORMS    += mainwindow.ui \
     settingsdialog.ui \

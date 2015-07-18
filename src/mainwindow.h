@@ -6,7 +6,7 @@
 #include <QProgressBar>
 
 #include "programconfigfile.h"
-#include "currentdirectoryconfigurer.h"
+#include "directorydatabase.h"
 #include "tagsbookswidget.h"
 
 namespace Ui {
@@ -28,7 +28,7 @@ private:
     Ui::MainWindow *ui;
     ProgramConfigFile* configFile_;
 
-    CurrentDirectoryConfigurer* configCurrentDir_;
+    DirectoryDatabase* configCurrentDir_;
 
     TagsBooksWidget* tbWidget_;
     QProgressBar* qProgressBar_;
