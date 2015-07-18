@@ -92,7 +92,7 @@ void MainWindow::onCurrentDirectoryChange() {
     connect(dirDB_, SIGNAL(initialDatabaseLoadFinished()),
             this, SLOT(finishInitialDatabaseLoad()));
 
-    connect(dirDB_, SIGNAL(oneBookAdded(int,QString)),
+    connect(dirDB_, SIGNAL(initialDatabaseLoadOneBookAdded(int,QString)),
             this, SLOT(updateStatusBarForInitialLoading(int, QString)));
 
 
