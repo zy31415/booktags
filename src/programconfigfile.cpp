@@ -4,18 +4,23 @@
 #include <QDebug>
 
 
+QString ProgramConfigFile::base_dir(".");
+//QString ProgramConfigFile::base_dir = QDir::homePath();
+
+QString ProgramConfigFile::prog_dir = base_dir + QString("/.bookcollection/");
+
+QString ProgramConfigFile::configFileBaseName = "config.xml";
+
+QString ProgramConfigFile::configFilePath = prog_dir + ProgramConfigFile::configFileBaseName;
+
+
 ProgramConfigFile::ProgramConfigFile() {
-    //QString base_dir = QDir::homePath();
-    QString base_dir(".");
-    QString prog_dir = base_dir + QString("/.bookcollection/");
 
     if (!QDir(prog_dir).exists())
         QDir(prog_dir).mkpath(".");
 
-    QString filebasename("config.xml");
-    QString filename(prog_dir + filebasename);
+    configFile.setFileName(configFilePath);
 
-    configFile.setFileName(filename);
 }
 
 bool ProgramConfigFile::ifConfigFileExist() {

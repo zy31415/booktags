@@ -1,4 +1,5 @@
-/** \file tagsbookswidget.h
+/** @file tagsbookswidget.h
+ *
  * Define a widget TagsBooksWidget which contains a tags list and a books list.
  *
  * \author Yang Zhang
@@ -11,7 +12,7 @@
 #include <QWidget>
 #include <QItemSelectionModel>
 
-#include "currentdirectoryconfigurer.h"
+#include "directorydatabase.h"
 #include "tagslistmodel.h"
 #include "bookstreemodel.h"
 

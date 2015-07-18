@@ -81,7 +81,7 @@ void MainWindow::onCurrentDirectoryChange() {
     if (configCurrentDir_ != 0)
         delete configCurrentDir_;
 
-    configCurrentDir_ = new CurrentDirectoryConfigurer(
+    configCurrentDir_ = new DirectoryDatabase(
                 getCurrentDirectory(),
                 this);
 

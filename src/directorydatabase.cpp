@@ -1,4 +1,4 @@
-#include "currentdirectoryconfigurer.h"
+#include "directorydatabase.h"
 
 // Qt
 #include <QSqlQuery>
@@ -13,7 +13,7 @@
 
 class MainWindow;
 
-CurrentDirectoryConfigurer::CurrentDirectoryConfigurer(
+DirectoryDatabase::DirectoryDatabase(
         QString dir,
         QObject *parent) :
 
@@ -32,11 +32,11 @@ CurrentDirectoryConfigurer::CurrentDirectoryConfigurer(
 
 }
 
-CurrentDirectoryConfigurer::~CurrentDirectoryConfigurer() {
+DirectoryDatabase::~DirectoryDatabase() {
     delete conn_;
 }
 
-void CurrentDirectoryConfigurer::initDatabase() {
+void DirectoryDatabase::initDatabase() {
 
     QSqlDatabase db = conn_->database();
 
@@ -70,7 +70,7 @@ void CurrentDirectoryConfigurer::initDatabase() {
 // TODO - carefully think about the design of this multithreading process.
 //          Avoid using parent() -  this is not a good design.
 //
-void CurrentDirectoryConfigurer::loadAllBooksIntoDatabase() {
+void DirectoryDatabase::loadAllBooksIntoDatabase() {
     InitialLoadThread* thread_ = new InitialLoadThread(dir, conn_, this);
 
     connect(thread_, SIGNAL(finished()), thread_, SLOT(deleteLater()));
@@ -87,7 +87,7 @@ void CurrentDirectoryConfigurer::loadAllBooksIntoDatabase() {
 }
 
 
-QStringList CurrentDirectoryConfigurer::getTags() {
+QStringList DirectoryDatabase::getTags() {
     QSqlDatabase db = conn_->database();
     db.open();
 
@@ -111,7 +111,7 @@ QStringList CurrentDirectoryConfigurer::getTags() {
     return out;
 }
 
-QStringList CurrentDirectoryConfigurer::getFiles(const QString& tag) {
+QStringList DirectoryDatabase::getFiles(const QString& tag) {
     QSqlDatabase db = conn_->database();
     db.open();
 
@@ -136,7 +136,7 @@ QStringList CurrentDirectoryConfigurer::getFiles(const QString& tag) {
     return out;
 }
 
-bool CurrentDirectoryConfigurer::hasTag(const QString& tag) {
+bool DirectoryDatabase::hasTag(const QString& tag) {
     QSqlDatabase db = conn_->database();
     db.open();
     QSqlQuery query(db);
@@ -158,7 +158,7 @@ bool CurrentDirectoryConfigurer::hasTag(const QString& tag) {
     return res;
 }
 
-void CurrentDirectoryConfigurer::addTag(QString tag) {
+void DirectoryDatabase::addTag(QString tag) {
     QSqlDatabase db = conn_->database();
     db.open();
     QSqlQuery query(db);
@@ -172,7 +172,7 @@ void CurrentDirectoryConfigurer::addTag(QString tag) {
     db.close(); // for close connection
 }
 
-void CurrentDirectoryConfigurer::removeTag(QString tag) {
+void DirectoryDatabase::removeTag(QString tag) {
     QSqlDatabase db = conn_->database();
     db.open();
     QSqlQuery query(db);

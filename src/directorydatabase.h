@@ -1,4 +1,8 @@
-/** \file
+/** @file directorydatabase.h
+ * This file defines the class DirectoryDatabase to provide an interface
+ * to the database that is used to store tags and books information.
+ *
+ * @author Yang Zhang
  */
 
 #ifndef DIRECTORYDATABASE_H
@@ -37,7 +41,7 @@ public:
     ///
     /// \brief Load all books under the directory to the database.
     ///
-    /// This command create a new thread to do the job so the UI thread
+    /// This command creates a new thread to do the job so the main thread (UI thread)
     /// won't be locked.
     ///
     void loadAllBooksIntoDatabase();
