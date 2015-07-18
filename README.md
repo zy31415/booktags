@@ -19,6 +19,12 @@
     
     Please consult the INSTALL and COPYING files for more information.
 
+## Code Design
+	
+	This Program is desktop application that is written in C++ using Qt5.
+
+	Sqlite3 database is used to manage informationof books and tags.
+
 
 ## Code Documentation
 
