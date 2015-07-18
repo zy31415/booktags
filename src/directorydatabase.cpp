@@ -67,8 +67,10 @@ void DirectoryDatabase::initDatabase() {
 
 }
 
-// TODO - carefully think about the design of this multithreading process.
-//          Avoid using parent() -  this is not a good design.
+// TODO - carefully think about the design of this multithreading process:
+//      Design a new class:
+//          DirectoryDatabaseInitializer - using a parallel thread to check directory and load books into the database.
+//
 //
 void DirectoryDatabase::loadAllBooksIntoDatabase() {
     InitialLoadThread* thread_ = new InitialLoadThread(dir, conn_, this);

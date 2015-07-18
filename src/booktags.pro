@@ -22,7 +22,8 @@ SOURCES += main.cpp\
     tagslistmodel.cpp \
     databaseconnection.cpp \
     bookstreemodel.cpp \
-    directorydatabase.cpp
+    directorydatabase.cpp \
+    directorydatabaseinitializer.cpp
 
 HEADERS  += mainwindow.h \
     settingsdialog.h \
@@ -34,7 +35,8 @@ HEADERS  += mainwindow.h \
     tagslistmodel.h \
     databaseconnection.h \
     bookstreemodel.h \
-    directorydatabase.h
+    directorydatabase.h \
+    directorydatabaseinitializer.h
 
 FORMS    += mainwindow.ui \
     settingsdialog.ui \
