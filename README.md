@@ -2,7 +2,7 @@
 # 			BookTags 
 	Electronic Books tagging and managing
 	-------------------------------------
-    [booktags](http://zy31415.github.io/booktags)
+
 
 ##	Introduction
 
@@ -12,6 +12,10 @@
 	Do you have large number of electronic books? Do you struggle with how to
 	effectively manage them and find them quickly when you need them? This 
 	program is designed to solve that problem.
+
+	The website for this program: [http://zy31415.github.io/booktags]
+	
+	Its github website: [https://github.com/zy31415/booktags]
 
 
 
@@ -34,4 +38,4 @@
 ##	Author
 	
 	Yang Zhang (zy31415@gmail.com)
-	https://github.com/zy31415
+	[https://github.com/zy31415]
