@@ -80,7 +80,7 @@ void DirectoryDatabase::loadAllBooksIntoDatabase() {
 
     // forward the signal oneBookAdded
     connect(thread_, &InitialLoadThread::oneItemAdded,
-            this, &DirectoryDatabase::oneBookAdded);
+            this, &DirectoryDatabase::initialDatabaseLoadOneBookAdded);
 
     connect(thread_, &InitialLoadThread::finished,
             this, &DirectoryDatabase::initialDatabaseLoadFinished);
