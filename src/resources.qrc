@@ -7,5 +7,6 @@
         <file>icons/directory.png</file>
         <file>icons/file.png</file>
         <file>icons/mobi.png</file>
+        <file>icons/scanDir.png</file>
     </qresource>
 </RCC>
