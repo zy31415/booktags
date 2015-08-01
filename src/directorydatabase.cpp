@@ -108,11 +108,7 @@ QStringList DirectoryDatabase::getTags() {
     QSqlQuery query(db);
     QString cmd = QString("select tag from tb_tags;");
 
-    QMutex* mutex = conn_->mutex();
-
-    mutex->lock();
-    QUERY_EXEC(query, cmd);
-    mutex->unlock();    
+    QUERY_EXEC(query, cmd);   
 
     QStringList out;
 
@@ -132,12 +128,7 @@ QStringList DirectoryDatabase::getBooks(const QString& tag) {
     QSqlQuery query(db);
     QString cmd = QString("select filename from tb_matches where tag=\"%1\";").arg(tag.trimmed());
 
-
-    QMutex* mutex = conn_->mutex();
-
-    mutex->lock();
     QUERY_EXEC(query, cmd);
-    mutex->unlock();
 
     QStringList out;
 
@@ -156,10 +147,7 @@ bool DirectoryDatabase::hasTag(const QString& tag) {
     QSqlQuery query(db);
     QString cmd = QString("select exists (select tag from tb_tags where tag=\"%1\");").arg(tag.trimmed());
 
-    QMutex* mutex = conn_->mutex();
-    mutex->lock();
     QUERY_EXEC(query, cmd);
-    mutex->unlock();
 
     bool res;
     if (query.next())
@@ -178,10 +166,7 @@ void DirectoryDatabase::addTag(QString tag) {
     QSqlQuery query(db);
     QString cmd = QString("insert into tb_tags (tag) values (\"%1\");").arg(tag.trimmed());
 
-    QMutex* mutex = conn_->mutex();
-    mutex->lock();
     QUERY_EXEC(query, cmd);
-    mutex->unlock();
 
     db.close(); // for close connection
 }
@@ -194,11 +179,8 @@ void DirectoryDatabase::removeTag(QString tag) {
     QString cmd1 = QString("delete from tb_matches where tag=(\"%1\");").arg(tag);
     QString cmd2 = QString("delete from tb_tags where tag=(\"%1\");").arg(tag);
 
-    QMutex* mutex = conn_->mutex();
-    mutex->lock();
     QUERY_EXEC(query, cmd1);
     QUERY_EXEC(query, cmd2);
-    mutex->unlock();
 
     db.close(); // for close connection
 }
