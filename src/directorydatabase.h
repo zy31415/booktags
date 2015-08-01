@@ -2,6 +2,8 @@
  * This file defines the class DirectoryDatabase to provide an interface
  * to the database that is used to store tags and books information.
  *
+ * The class defines all the fundamental operations to the directory database.
+ *
  * @author Yang Zhang
  */
 
@@ -19,9 +21,7 @@ class DirectoryDatabase : public QObject
     Q_OBJECT
 
 private:
-    QString dir, dir_config, path_database;
-
-    DatabaseConnection* conn_;
+    QString connection_name;
 
 public:
 
@@ -30,7 +30,8 @@ public:
     /// \param dir books directory
     /// \param parent
     ///
-    explicit DirectoryDatabase(QString dir, QObject *parent = 0);
+    explicit DirectoryDatabase(QString connection_name = QString("uithread"),
+                               QObject *parent = 0);
     ~DirectoryDatabase();
 
     ///

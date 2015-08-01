@@ -159,3 +159,8 @@ void MainWindow::finishInitialDatabaseLoad(){
     qProgressBar_->deleteLater();
     ui->statusBar->showMessage("Initial load finished!");
 }
+
+void MainWindow::on_action_Scan_direcotry_triggered()
+{
+
+}

@@ -14,14 +14,10 @@
 class MainWindow;
 
 DirectoryDatabase::DirectoryDatabase(
-        QString dir,
+        QString connection_name,
         QObject *parent) :
-
-    QObject(parent),
-    dir(dir),
-    dir_config(dir + "/.booktags"),
-    path_database(dir_config + "/booktags.sqlite3"),
-    conn_(new DatabaseConnection(path_database))
+    connection_name(connection_name),
+    QObject(parent)
 {
 
     if (!QDir(dir_config).exists()) {

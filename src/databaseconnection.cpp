@@ -2,9 +2,7 @@
 
 QMutex DatabaseConnection::m_mutex;
 
-DatabaseConnection::DatabaseConnection(const QString& file_db) : m_file_db(file_db)
-{
-}
+QString DatabaseConnection::m_file_db = QString("");
 
 
 QSqlDatabase DatabaseConnection::database(const QString& connectionName) {

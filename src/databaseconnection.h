@@ -3,6 +3,9 @@
  * This header file defines the class DatabaseConnection which is used
  * to handle the database connection to sqlite3 databases.
  *
+ * The default connection is "unithread", which is used in the main thread.
+ * In threads other than the main thread, use a different connection.
+ *
  * \author Yang Zhang
  */
 
@@ -26,27 +29,27 @@ private:
     ///
     /// \brief Path to sqlite3 database file.
     ///
-    QString m_file_db;
+    static QString m_file_db;
+
+    ///
+    /// \brief Private Constructor
+    /// This class will never be instantiated.
+    ///
+    DatabaseConnection() {}
 
 public:
-    ///
-    /// \brief Constructor
-    /// \param[in] Path to the file of a sqlite3 database.
-    ///
-    DatabaseConnection(const QString& file_db);
-
     ///
     /// \brief Return a database object based on connection name.
     /// \param[in] connection name of the database. Default connection name is "uithread".
     /// \return database object.
     ///
-    QSqlDatabase database(const QString& connectionName = QString("uithread"));
+    static QSqlDatabase database(const QString& connectionName = QString("uithread"));
 
     ///
     /// \brief Return a lock to database access.
     /// \return QMutex object.
     ///
-    QMutex* mutex();
+    static QMutex* mutex();
 };
 
 

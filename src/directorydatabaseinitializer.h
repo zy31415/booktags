@@ -15,11 +15,12 @@
 #ifndef DIRECTORYDATABASEINITIALIZER_H
 #define DIRECTORYDATABASEINITIALIZER_H
 
+#include <QString>
 
 class DirectoryDatabaseInitializer
 {
 public:
-    DirectoryDatabaseInitializer();
+    DirectoryDatabaseInitializer(QString dir);
 };
 
 #endif // DIRECTORYDATABASEINITIALIZER_H

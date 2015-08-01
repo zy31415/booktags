@@ -40,6 +40,8 @@ private slots:
     void on_action_Settings_triggered();
     void onCurrentDirectoryChange();
 
+    void on_action_Scan_direcotry_triggered();
+
 public slots:
 
     ///

@@ -23,7 +23,8 @@ SOURCES += main.cpp\
     databaseconnection.cpp \
     bookstreemodel.cpp \
     directorydatabase.cpp \
-    directorydatabaseinitializer.cpp
+    directorydatabaseinitializer.cpp \
+    scandirectorythread.cpp
 
 HEADERS  += mainwindow.h \
     settingsdialog.h \
@@ -36,7 +37,8 @@ HEADERS  += mainwindow.h \
     databaseconnection.h \
     bookstreemodel.h \
     directorydatabase.h \
-    directorydatabaseinitializer.h
+    directorydatabaseinitializer.h \
+    scandirectorythread.h
 
 FORMS    += mainwindow.ui \
     settingsdialog.ui \
