@@ -125,7 +125,7 @@ QStringList DirectoryDatabase::getTags() {
     return out;
 }
 
-QStringList DirectoryDatabase::getFiles(const QString& tag) {
+QStringList DirectoryDatabase::getBooks(const QString& tag) {
     QSqlDatabase db = getDatabase();
     db.open();
 

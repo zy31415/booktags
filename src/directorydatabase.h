@@ -43,18 +43,10 @@ public:
     ~DirectoryDatabase();
 
     ///
-    /// \brief Set a connection name.
-    /// \param connection name
-    ///
-    void setConnectionName(const QString& connectionName);
-
-    ///
     /// \brief Set the path of the database file
     /// \param path_database
     ///
     void setDir(const QString& dir);
-
-    QSqlDatabase getDatabase();
 
     ///
     /// \brief Initialize the database
@@ -80,7 +72,7 @@ public:
     /// \param tag
     /// \return
     ///
-    QStringList getFiles(const QString& tag);
+    QStringList getBooks(const QString& tag);
 
     ///
     /// \brief Add a tag into the database
