@@ -16,6 +16,7 @@
 // This project
 #include "settingsdialog.h"
 #include "currentdirectorydialog.h"
+#include "scandirectorythread.h"
 
 // TODO - handle matches: click tag to select books, click book to select tags.
 MainWindow::MainWindow(QWidget *parent) :
@@ -82,19 +83,9 @@ void MainWindow::onCurrentDirectoryChange() {
         dirDB_->deleteLater();
 
     /// Initialize dirDB_, and set up the connection between dirDB_ and the mainwindow.
-    dirDB_ = new DirectoryDatabase(
-                getCurrentDirectory(),
-                this);
-
-    connect(dirDB_, SIGNAL(initialDatabaseLoadStarted(int)),
-            this, SLOT(setStatusBarForInitialLoading(int)));
-
-    connect(dirDB_, SIGNAL(initialDatabaseLoadFinished()),
-            this, SLOT(finishInitialDatabaseLoad()));
-
-    connect(dirDB_, SIGNAL(initialDatabaseLoadOneBookAdded(int,QString)),
-            this, SLOT(updateStatusBarForInitialLoading(int, QString)));
-
+    dirDB_ = new DirectoryDatabase(this);
+    dirDB_->setDir(configFile_->getCurrentDirectory());
+    dirDB_->initDatabase();
 
     /// Initial load of list of tags
     QStringList tags = dirDB_->getTags();
@@ -106,7 +97,7 @@ void MainWindow::onCurrentDirectoryChange() {
 }
 
 void MainWindow::changeTagSelection(const QString& tag) {
-    QStringList files = dirDB_->getFiles(tag);
+    QStringList files = dirDB_->getBooks(tag);
     tbWidget_->updateBooksTree(files);
 }
 
@@ -138,29 +129,71 @@ void MainWindow::updateTagsBooksWidget() {
 }
 
 
-void MainWindow::setStatusBarForInitialLoading(int max) {
+void MainWindow::on_action_Scan_direcotry_triggered()
+{
+    ScanDirectoryThread* thread_ = new ScanDirectoryThread(
+                getCurrentDirectory(),
+                this);
+
+    // Handle missing file
+    connect(thread_, SIGNAL(missingFile(QString)),
+            this, SLOT(onMissingFile(QString)));
+
+    // A new book found.
+    connect(thread_, SIGNAL(newBookFound(QString)),
+            this, SLOT(onNewBookFound(QString)));
+
+    // when the thread is finished.
+    connect(thread_, SIGNAL(finished()),
+            thread_, SLOT(deleteLater()));
+
+    // when the thread is started.
+    connect(thread_, SIGNAL(started(int)),
+            this, SLOT(onDirectoryScanStarted(int)));
+
+    // when the thread is finished.
+    connect(thread_, SIGNAL(finished()),
+            this, SLOT(onDirectoryScanFinished()));
+
+    // when the thread is progressing and one more file is processed.
+    connect(thread_, SIGNAL(updateScanStatus(int)),
+            this, SLOT(onScanStatusUpdate(int)));
+
+    thread_->start();
+
+}
+
+void MainWindow::onMissingFile(const QString& path){
+    tbWidget_->addOneBookToTag(path,QString("lost"));
+    ui->statusBar->showMessage(QString("Missing: ") + path);
+}
+
+void MainWindow::onNewBookFound(const QString& path) {
+    tbWidget_->addOneBookToTag(path,QString("all"));
+    tbWidget_->addOneBookToTag(path,QString("new"));
+
+    ui->statusBar->showMessage(QString("Found: ") + path);
+}
+
+void MainWindow::onDirectoryScanStarted(int max) {
+    ui->action_Scan_direcotry->setEnabled(false);
+
     qProgressBar_ = new QProgressBar(ui->statusBar);
     qProgressBar_->setMinimum(0);
     qProgressBar_->setMaximum(max);
 
     ui->statusBar->addPermanentWidget(qProgressBar_, 0);
-
 }
 
-void MainWindow::updateStatusBarForInitialLoading(int current, QString file) {
-    qProgressBar_->setValue(current);
-    ui->statusBar->showMessage(file);
-
-    tbWidget_->addOneBookToTag(file, QString("all"));
-}
-
-void MainWindow::finishInitialDatabaseLoad(){
+void MainWindow::onDirectoryScanFinished() {
     ui->statusBar->removeWidget(qProgressBar_);
     qProgressBar_->deleteLater();
-    ui->statusBar->showMessage("Initial load finished!");
+    ui->statusBar->showMessage("Directory scanning finished!");
+
+    ui->action_Scan_direcotry->setEnabled(true);
+
 }
 
-void MainWindow::on_action_Scan_direcotry_triggered()
-{
-
+void MainWindow::onScanStatusUpdate(int current) {
+    qProgressBar_->setValue(current);
 }

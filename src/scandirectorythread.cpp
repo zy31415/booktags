@@ -6,40 +6,88 @@
 
 ScanDirectoryThread::ScanDirectoryThread(
         const QString& dir,
-        const QStringList& books,
         QObject* parent):
     dir(dir),
-    books(books),
-    QThread(parent)
-{}
+    QThread(parent) {
 
-// TODO - Use QDir::entryList to get a list of files in the directory.
-//          Note that Filters can be used to filter book files.
-ScanDirectoryThread::run() Q_DECL_OVERRIDE {
+    db.setDir(dir);
+    db.setConnectionName("scandirectory");
+}
+
+void ScanDirectoryThread::run() Q_DECL_OVERRIDE {
+    // clear tag new:
+    db.removeBooksFromTag("new");
+
+    // start comparison
+    QStringList books = db.getAllBooks();
     books.sort();
+
+    QStringList files = getSortedFilesList();
+
+    QStringList::iterator b = books.begin();
+    QStringList::iterator f = files.begin();
+
+    emit started( books.length() > files.length() ? books.length():files.length());
+
+    int nth = 0;
+    while( b != books.end() && f != files.end()) {
+        if (*f == *b) {
+            b++;
+            f++;
+        }
+
+        else if (*f < *b) {
+            db.addBook(*f);
+            db.tagBook("all", *f);
+            db.tagBook("new", *f);
+            emit newBookFound(*f);
+            f++;
+        }
+        else {
+            db.tagBook("lost", *f);
+            emit missingFile(*b);
+            b++;
+        }
+
+        nth++;
+        emit updateScanStatus(nth);
+    }
+
+    while(b!=books.end()) {
+        db.tagBook("lost", *f);
+        emit missingFile(*b);
+        b++;
+
+        nth++;
+        emit updateScanStatus(nth);
+    }
+
+    while(f!=files.end()) {
+        db.addBook(*f);
+        db.tagBook("all", *f);
+        db.tagBook("new", *f);
+        emit newBookFound(*f);
+        f++;
+
+        nth++;
+        emit updateScanStatus(nth);
+    }
+}
+
+QStringList ScanDirectoryThread::getSortedFilesList() {
+    QStringList files;
+
     QDirIterator it(dir, QDirIterator::Subdirectories);
     while (it.hasNext()) {
         QString f = it.next();
         if (isValidBookFormat(f)){
             QString path = QDir(dir).relativeFilePath(f);
 
-            int size =  QFileInfo(f).size();
-
-
-            QString cm1 = QString("insert into tb_books (filename, size) values (\"%1\", %2);").arg(path).arg(size);
-            QString cm2 = QString("insert into tb_matches (tag, filename) values (\"all\", \"%1\");").arg(path);
-
-            mutex_->lock();
-            QUERY_EXEC(q, cm1);
-            QUERY_EXEC(q, cm2);
-            mutex_->unlock();
-            nth++;
-
-            emit oneItemAdded(nth, path);
+            files << path;
         }
     }
-}
 
+    files.sort();
+    return files;
 }
-
 

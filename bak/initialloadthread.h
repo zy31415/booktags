@@ -12,8 +12,6 @@
 #include <QObject>
 #include <QThread>
 
-#include "databaseconnection.h"
-
 class InitialLoadThread : public QThread
 {
     Q_OBJECT

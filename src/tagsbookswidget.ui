@@ -51,31 +51,6 @@
         </widget>
        </item>
        <item>
-        <widget class="QListWidget" name="listWidget">
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>62</height>
-          </size>
-         </property>
-         <item>
-          <property name="text">
-           <string>all</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>new</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>lost</string>
-          </property>
-         </item>
-        </widget>
-       </item>
-       <item>
         <widget class="QListView" name="listViewTags"/>
        </item>
        <item>

@@ -18,9 +18,7 @@ SOURCES += main.cpp\
     programconfigfile.cpp \
     currentdirectorydialog.cpp \
     tagsbookswidget.cpp \
-    initialloadthread.cpp \
     tagslistmodel.cpp \
-    databaseconnection.cpp \
     bookstreemodel.cpp \
     scandirectorythread.cpp \
     directorydatabase.cpp
@@ -31,9 +29,7 @@ HEADERS  += mainwindow.h \
     currentdirectorydialog.h \
     utils.h \
     tagsbookswidget.h \
-    initialloadthread.h \
     tagslistmodel.h \
-    databaseconnection.h \
     bookstreemodel.h \
     directorydatabase.h \
     scandirectorythread.h

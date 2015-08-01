@@ -13,7 +13,8 @@
 #include <QString>
 #include <QStringList>
 #include <QObject>
-
+#include <QSqlDatabase>
+#include <QMutex>
 
 class DirectoryDatabase : public QObject
 {
@@ -22,6 +23,11 @@ class DirectoryDatabase : public QObject
 private:
     QString connectionName;
     QString dir, dir_config, path_database;
+
+    ///
+    /// \brief mutex lock to makesure that this class is thread safe.
+    ///
+    static QMutex mutex;
 
     ///
     /// \brief Get an object of QSqlDatabase which can be used do database operation.
@@ -52,14 +58,6 @@ public:
     /// \brief Initialize the database
     ///
     void initDatabase();
-
-    ///
-    /// \brief Load all books under the directory to the database.
-    ///
-    /// This command creates a new thread to do the job so the main thread (UI thread)
-    /// won't be locked.
-    ///
-    void loadAllBooksIntoDatabase();
 
     ///
     /// \brief Get all tags list from the database
@@ -94,6 +92,35 @@ public:
     bool hasTag(const QString& tag);
 
     void addBook(const QString& path);
+
+    ///
+    /// \brief set the connection name.
+    /// \param Connection name. Default name is "uithread".
+    ///
+    void setConnectionName(const QString& connectionName = QString("uithread"));
+
+
+    ///
+    /// \brief Get all books stored in database.
+    /// \return
+    ///
+    QStringList getAllBooks();
+
+    ///
+    /// \brief Assign a tag to a book;
+    /// \param tag
+    /// \param book
+    ///
+    void tagBook(const QString& tag,
+                 const QString& book);
+
+    ///
+    /// \brief Remove all books under a tag.
+    /// \param tag
+    ///
+    /// This function doesn't delete all books from the database.
+    ///
+    void removeBooksFromTag(const QString& tag);
 
 public slots:
 

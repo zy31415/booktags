@@ -42,6 +42,12 @@ private slots:
 
     void on_action_Scan_direcotry_triggered();
 
+    void onMissingFile(const QString&);
+
+    void onNewBookFound(const QString&);
+
+
+
 public slots:
 
     ///
@@ -56,9 +62,9 @@ public slots:
     void deleteSelection(const QString& tag);
 
     void changeStatusBarMessage(QString msg);
+
+
     void updateTagsBooksWidget();
-    void setStatusBarForInitialLoading(int max);
-    void updateStatusBarForInitialLoading(int current, QString file);
 
     ///
     /// \brief When a new tag selected
@@ -70,9 +76,21 @@ public slots:
     void changeTagSelection(const QString& tag);
 
     ///
-    /// \brief This slot is called when the initial database load finished.
+    /// \brief This slot is called when the directory scanning started.
+    /// \param max
     ///
-    void finishInitialDatabaseLoad();
+    void onDirectoryScanStarted(int max);
+
+    ///
+    /// \brief This slot is called when the directory scanning finished.
+    ///
+    void onDirectoryScanFinished();
+
+    ///
+    /// \brief This slot is called when the scan status updated.
+    /// \param current
+    ///
+    void onScanStatusUpdate(int current);
 };
 
 #endif // MAINWINDOW_H

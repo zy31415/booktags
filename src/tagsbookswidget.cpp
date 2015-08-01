@@ -145,25 +145,21 @@ void TagsBooksWidget::on_pushButtonRemoveTag_clicked()
      }
 }
 
-///
-/// \brief One book item will be shown under the indicated tag.
-/// \param item book name
-/// \param tag tag name
-///
 void TagsBooksWidget::addOneBookToTag(QString item, QString tag) {
-//    if (ui->listWidgetTags->selectedItems()[0]->text() == tag)
-//        ui->listWidgetBooks->addItem(item);
+    if (getSelectedTag() == tag)
+        booksTree_->appendBook(item);
 }
 
 void TagsBooksWidget::changeTagSelection(const QItemSelection& selected,
                                          const QItemSelection& deselected) {
 
-    QString tag = selected.indexes()[0].data(Qt::DisplayRole).toString();
-
+    QString tag = tagSelection_->selectedIndexes()[0].data(Qt::DisplayRole).toString();
     emit tagSelected(tag);
-
 }
 
+QString TagsBooksWidget::getSelectedTag() {
+    return tagSelection_->selectedIndexes()[0].data(Qt::DisplayRole).toString();
+}
 
 void TagsBooksWidget::appendTag(QString tag) {
     tagsList_->appendTag(tag);

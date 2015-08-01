@@ -56,6 +56,8 @@ public:
 
     void appendTag(QString tag);
 
+    QString getSelectedTag();
+
 
 private:
     Ui::TagsBooksWidget *ui;
@@ -94,6 +96,12 @@ private slots:
     void changeTagSelection(const QItemSelection&, const QItemSelection&);
 
 public slots:
+
+    ///
+    /// \brief One book item will be shown under the indicated tag.
+    /// \param item book name
+    /// \param tag tag name
+    ///
     void addOneBookToTag(QString item, QString tag);
 
 signals:
