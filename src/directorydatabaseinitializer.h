@@ -19,6 +19,9 @@
 
 class DirectoryDatabaseInitializer
 {
+private:
+    QString dir, dir_config, path_database;
+
 public:
     DirectoryDatabaseInitializer(QString dir);
 };

@@ -14,14 +14,23 @@
 #include <QStringList>
 #include <QObject>
 
-#include "databaseconnection.h"
 
 class DirectoryDatabase : public QObject
 {
     Q_OBJECT
 
 private:
-    QString connection_name;
+    QString connectionName;
+    QString dir, dir_config, path_database;
+
+    ///
+    /// \brief Get an object of QSqlDatabase which can be used do database operation.
+    /// \return An QSqlDatabase object.
+    ///
+    /// Note that this function is private, so that no other objects can get the
+    /// database connection.
+    ///
+    QSqlDatabase getDatabase();
 
 public:
 
@@ -30,9 +39,22 @@ public:
     /// \param dir books directory
     /// \param parent
     ///
-    explicit DirectoryDatabase(QString connection_name = QString("uithread"),
-                               QObject *parent = 0);
+    explicit DirectoryDatabase(QObject *parent = 0);
     ~DirectoryDatabase();
+
+    ///
+    /// \brief Set a connection name.
+    /// \param connection name
+    ///
+    void setConnectionName(const QString& connectionName);
+
+    ///
+    /// \brief Set the path of the database file
+    /// \param path_database
+    ///
+    void setDir(const QString& dir);
+
+    QSqlDatabase getDatabase();
 
     ///
     /// \brief Initialize the database

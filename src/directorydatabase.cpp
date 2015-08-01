@@ -13,28 +13,26 @@
 
 class MainWindow;
 
-DirectoryDatabase::DirectoryDatabase(
-        QString connection_name,
-        QObject *parent) :
-    connection_name(connection_name),
+DirectoryDatabase::DirectoryDatabase(QObject *parent) :
+    connection_name(QString("uithread")),
     QObject(parent)
 {
-
-    if (!QDir(dir_config).exists()) {
-        QDir(dir_config).mkpath(".");
-        initDatabase();
-        loadAllBooksIntoDatabase();
-    }
-
 }
 
 DirectoryDatabase::~DirectoryDatabase() {
     delete conn_;
 }
 
+
+void DirecotoryDatabase::setDir(QString dir) {
+    this->dir = dir;
+    dir_config = dir + "/.booktags";
+    path_database = dir_config + "/booktags.sqlite3";
+}
+
 void DirectoryDatabase::initDatabase() {
 
-    QSqlDatabase db = conn_->database();
+    QSqlDatabase db = getDatabase();
 
     db.open();
 
@@ -61,6 +59,21 @@ void DirectoryDatabase::initDatabase() {
                    "foreign key (filename) references tb_books(filename)"
                    ")");
 
+    db.close();
+
+}
+
+QSqlDatabase DirectoryDatabase::getDatabase() {
+    QSqlDatabase db;
+
+    if (!QSqlDatabase::contains(connectionName))
+        db = QSqlDatabase::addDatabase("QSQLITE",connectionName);
+    else
+        db = QSqlDatabase::database(connectionName);
+
+    db.setDatabaseName(path_database);
+
+    return db;
 }
 
 // TODO - carefully think about the design of this multithreading process:
@@ -89,7 +102,7 @@ void DirectoryDatabase::loadAllBooksIntoDatabase() {
 
 
 QStringList DirectoryDatabase::getTags() {
-    QSqlDatabase db = conn_->database();
+    QSqlDatabase db = getDatabase();
     db.open();
 
     QSqlQuery query(db);
@@ -113,7 +126,7 @@ QStringList DirectoryDatabase::getTags() {
 }
 
 QStringList DirectoryDatabase::getFiles(const QString& tag) {
-    QSqlDatabase db = conn_->database();
+    QSqlDatabase db = getDatabase();
     db.open();
 
     QSqlQuery query(db);
@@ -138,7 +151,7 @@ QStringList DirectoryDatabase::getFiles(const QString& tag) {
 }
 
 bool DirectoryDatabase::hasTag(const QString& tag) {
-    QSqlDatabase db = conn_->database();
+    QSqlDatabase db = getDatabase();
     db.open();
     QSqlQuery query(db);
     QString cmd = QString("select exists (select tag from tb_tags where tag=\"%1\");").arg(tag.trimmed());
@@ -160,7 +173,7 @@ bool DirectoryDatabase::hasTag(const QString& tag) {
 }
 
 void DirectoryDatabase::addTag(QString tag) {
-    QSqlDatabase db = conn_->database();
+    QSqlDatabase db = getDatabase();
     db.open();
     QSqlQuery query(db);
     QString cmd = QString("insert into tb_tags (tag) values (\"%1\");").arg(tag.trimmed());
@@ -174,7 +187,7 @@ void DirectoryDatabase::addTag(QString tag) {
 }
 
 void DirectoryDatabase::removeTag(QString tag) {
-    QSqlDatabase db = conn_->database();
+    QSqlDatabase db = getDatabase();
     db.open();
     QSqlQuery query(db);
 

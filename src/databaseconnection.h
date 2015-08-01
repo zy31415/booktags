@@ -9,6 +9,11 @@
  * \author Yang Zhang
  */
 
+// TODO - Use a single class to handle all database operation.
+//     Combine these three classes:
+//          DatabaseConnection, DirectoryDatabase and DirectoryDatabaseInitializer
+//
+
 #ifndef DATABASECONNECTION_H
 #define DATABASECONNECTION_H
 
@@ -50,6 +55,8 @@ public:
     /// \return QMutex object.
     ///
     static QMutex* mutex();
+
+    static void setDatabaseFile(const QString& file);
 };
 
 

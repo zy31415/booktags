@@ -21,3 +21,7 @@ QSqlDatabase DatabaseConnection::database(const QString& connectionName) {
 QMutex* DatabaseConnection::mutex() {
     return &m_mutex;
 }
+
+void DatabaseConnection::setDatabaseFile(const QString& file) {
+    m_file_db = file;
+}
