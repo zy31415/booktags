@@ -78,13 +78,13 @@ public:
     /// \brief Add a tag into the database
     /// \param tag tag to be added
     ///
-    void addTag(QString tag);
+    void addTag(const QString& tag);
 
     ///
     /// \brief Remove a tag from the database
     /// \param tag
     ///
-    void removeTag(QString tag);
+    void removeTag(const QString& tag);
 
     ///
     /// \brief If the tag in the database.
@@ -92,6 +92,8 @@ public:
     /// \return true - yes, false - no
     ///
     bool hasTag(const QString& tag);
+
+    void addBook(const QString& path);
 
 public slots:
 
